@@ -13,8 +13,10 @@ Imports:
     FactoMineR,
     ggplot2,
     glue,
+    grDevices,
+    leaflet,
     magrittr (>= 2.0.3),
-    shiny (>= 1.7.4),
+    RColorBrewer,
     tibble
 Suggests: 
     knitr,
