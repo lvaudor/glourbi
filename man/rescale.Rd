@@ -6,6 +6,14 @@
 \usage{
 rescale(x, maxval = 1)
 }
+\arguments{
+\item{x}{a numerical vector}
+
+\item{maxval}{a scalar such that returned vector falls between -maxval and + maxval}
+}
+\value{
+a scaled vector
+}
 \description{
 Rescale numerical values so that they are centered around 0 and fall between -maxval and maxval
 }

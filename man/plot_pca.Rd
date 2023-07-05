@@ -15,6 +15,9 @@ plot_pca(pca, type = "var", i = "Dim.1", j = "Dim.2")
 
 \item{j}{factorial axis represented as y (defaults to "Dim.2")}
 }
+\value{
+a PCA plot of individuals or variables
+}
 \description{
 Plot the variables on factorial plan (i,j)
 }

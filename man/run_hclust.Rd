@@ -6,6 +6,14 @@
 \usage{
 run_hclust(dataset, nclust = 5, namevar = "cluster")
 }
+\arguments{
+\item{dataset}{dataset name}
+
+\item{nclust}{number of clusters}
+}
+\value{
+a dataset in which a new variable exists documenting classes (nclust clusters)
+}
 \description{
 Runs a hierarchical clustering on dataset
 }

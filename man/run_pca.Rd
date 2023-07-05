@@ -6,6 +6,9 @@
 \usage{
 run_pca(dataset, quali.sup = NULL)
 }
+\value{
+a PCA object
+}
 \description{
 Runs a PCA on dataset
 }
