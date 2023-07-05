@@ -10,8 +10,13 @@ all_cities=all_cities %>%
   mutate(name=paste0(Urban.Aggl,rank)) %>%
   select(-Urban.Aggl,-ntot,-rank) %>%
   ungroup() %>%
-  mutate(biom=paste0("b",biom),
-         clco=paste0("c",clco))
+  mutate(biom=paste0("b",sprintf("%02d",biom)),
+         clco=paste0("c",sprintf("%02d",clco)),
+         clim=paste0("c",sprintf("%02d",clim))) %>%
+  mutate(biom=as.factor(biom),
+         clco=as.factor(clco),
+         clim=as.factor(clim)
+         )
 
 usethis::use_data(all_cities, overwrite = TRUE)
 
