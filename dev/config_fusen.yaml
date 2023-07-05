@@ -1,0 +1,42 @@
+flat_full.Rmd:
+  path: dev/flat_full.Rmd
+  state: active
+  R:
+  - R/norm_data.R
+  - R/plot_pca.R
+  - R/rescale.R
+  - R/run_hclust.R
+  - R/run_pca.R
+  - R/sep_data.R
+  tests:
+  - tests/testthat/test-sep_data.R
+  - tests/testthat/test-norm_data.R
+  - tests/testthat/test-run_pca.R
+  - tests/testthat/test-rescale.R
+  - tests/testthat/test-run_hclust.R
+  - tests/testthat/test-plot_pca.R
+  vignettes: vignettes/get-started.Rmd
+  inflate:
+    flat_file: dev/flat_full.Rmd
+    vignette_name: Get started
+    open_vignette: true
+    check: true
+    document: true
+    overwrite: ask
+flat_shiny.Rmd:
+  path: dev/flat_shiny.Rmd
+  state: active
+  R:
+  - R/app_server.R
+  - R/app_ui.R
+  tests:
+  - tests/testthat/test-app_ui.R
+  - tests/testthat/test-app_server.R
+  vignettes: vignettes/get-started.Rmd
+  inflate:
+    flat_file: dev/flat_shiny.Rmd
+    vignette_name: Get started
+    open_vignette: true
+    check: true
+    document: true
+    overwrite: ask

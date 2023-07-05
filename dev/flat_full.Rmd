@@ -1,0 +1,289 @@
+---
+title: "flat_full.Rmd for working package"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+<!-- Run this 'development' chunk -->
+<!-- Store every call to library() that you need to explore your functions -->
+
+```{r development, include=FALSE}
+library(testthat)
+```
+
+<!--
+ You need to run the 'description' chunk in the '0-dev_history.Rmd' file before continuing your code there.
+
+If it is the first time you use {fusen}, after 'description', you can directly run the last chunk of the present file with inflate() inside.
+--> 
+
+```{r development-load}
+# Load already included functions if relevant
+pkgload::load_all(export_all = FALSE)
+```
+
+
+# sep_data
+    
+```{r function-sep_data}
+#' A function that separates variables in the dataset into 3 groups: identifying (vars_id), descriptive (vars_des), numeric (vars_num)
+#' @param dataset a dataset
+#' Description
+#' 
+#' @return a list with elements vars_id, vars_des,vars_num
+#' 
+#' @export
+sep_data <- function(dataset){
+  dataset =dataset %>% 
+    na.omit()
+  # Keep only variables used for calculations of PCA
+  vars_id="name"
+  vars_des=c("Urban.Aggl","ID","Latitude","Longitude",
+             "Continent","Country.Co","City.Code","clco","biom",
+             "plain_area","plain_perc")
+  vars_num=colnames(dataset)[which(!(colnames(dataset) %in% c(vars_id,vars_des)))]
+  return(list(dataset=dataset,
+              vars_id=vars_id,
+              vars_des=vars_des,
+              vars_num=vars_num))
+}
+```
+  
+```{r example-sep_data}
+sep_data(all_cities)
+```
+  
+```{r tests-sep_data}
+data(all_cities)
+test_that("sep_data works", {
+  expect_true(inherits(sep_data, "function")) 
+  expect_true(is.list(sep_data(all_cities)))
+})
+```
+
+
+# norm_data: a function to normalize data prior to PCA or Hierarchical clustering calculations
+
+```{r function-norm_data}
+#' Normalize columns of a dataset (in case they are numeric)
+#' @param dataset a dataset
+#' @return a normalized dataset in which all numeric variables have been centered and scaled
+#' 
+norm_data <- function(dataset, label="name"){
+  # Keep only complete rows
+  datacomp=dataset %>% 
+    sep_data() %>% 
+    .$dataset
+  vars_num=dataset %>% 
+    sep_data() %>% 
+    .$vars_num
+  
+  dataset_num=datacomp[,vars_num]
+  
+  # All numeric variables are centered and scaled
+  dataset_norm=dataset_num %>% 
+    dplyr::select_if(is.numeric) %>% 
+    dplyr::mutate_all(~.-mean(.)) %>%
+    dplyr::mutate_all(~./sd(.)) %>% 
+    dplyr::mutate(name=datacomp[[label]]) %>% 
+    tibble::column_to_rownames({{label}})
+  return(dataset_norm)
+}
+```
+  
+```{r example-norm_data}
+glourbi:::norm_data(all_cities)
+```
+  
+```{r tests-norm_data}
+test_that("norm_data works", {
+  expect_true(inherits(norm_data, "function")) 
+})
+```
+
+# run_pca
+    
+```{r function-run_pca}
+#' Runs a PCA on dataset
+#' @return
+#' 
+#' @export
+run_pca <- function(dataset, quali.sup=NULL){
+  datacomp=dataset %>% 
+    sep_data() %>% 
+    .$dataset
+  dataset_num = dataset %>%
+    glourbi:::norm_data() 
+    
+  if(!is.null(quali.sup)){
+    dataset_num=dataset_num %>% 
+      dplyr::mutate({{quali.sup}}:=as.factor(datacomp[[quali.sup]]))
+    num_quali.sup=which(colnames(dataset_num)==quali.sup)
+  }else{num_quali.sup=NULL}
+    
+  pca=FactoMineR::PCA(dataset_num,
+                      quali.sup=num_quali.sup)
+  pca$quali.sup.name=quali.sup
+  if(!is.null(quali.sup)){pca$quali.sup.value=datacomp[[quali.sup]]}
+  return(pca)
+}
+```
+  
+```{r example-run_pca}
+data(all_cities)
+mypca=run_pca(all_cities)
+all_cities_clust=run_hclust(all_cities)
+mypca=run_pca(all_cities_clust, quali.sup="cluster")
+```
+  
+```{r tests-run_pca}
+test_that("run_pca works", {
+  expect_true(inherits(run_pca, "function")) 
+})
+```
+
+# rescale
+    
+```{r function-rescale}
+#' Rescale numerical values so that they are centered around 0 and fall between -maxval and maxval
+#' @return
+#' 
+#' @export
+rescale=function(x,maxval=1){
+      x=x-mean(x, na.rm=TRUE)
+      maxval_effective=max(abs(x), na.rm=TRUE)
+      ratio=maxval_effective/maxval
+      x=x/ratio
+      return(x)
+    }
+```
+  
+```{r example-rescale}
+rescale(rnorm(100,5,3),maxval=10)
+```
+  
+```{r tests-rescale}
+test_that("rescale works", {
+  expect_true(inherits(rescale, "function")) 
+})
+```
+
+
+# run_hclust
+    
+```{r function-run_hclust}
+#' Runs a hierarchical clustering on dataset
+#' @dataset dataset name
+#' @nclust number of clusters
+#' 
+#' @return
+#' 
+#' @export
+run_hclust <- function(dataset, nclust=5,namevar="cluster"){
+    # add leading zeros to cluster number to keep order
+    ndigits=ceiling(nclust/10)
+    # normalize numerical data
+    datan=glourbi:::norm_data(dataset)
+    distobj=dist(datan)
+    tree=hclust(distobj)
+    datan=datan %>% 
+      tibble::rownames_to_column("name") %>% 
+      tibble::as_tibble() %>% 
+      dplyr::mutate(cluster=cutree(tree,k=nclust)) %>% 
+      dplyr::mutate(cluster=paste0("cl",
+                                   sprintf(glue::glue("%0{ndigits}d"),
+                                           cluster))) %>% 
+      dplyr::select(name,everything())
+    return(datan)
+}
+```
+  
+```{r example-run_hclust}
+data(all_cities)
+all_cities_clust=run_hclust(all_cities)
+```
+  
+```{r tests-run_hclust}
+test_that("run_hclust works", {
+  expect_true(inherits(run_hclust, "function")) 
+})
+```
+  
+# plot_pca
+    
+```{r function-plot_pca}
+#' Plot the variables on factorial plan (i,j)
+#' @param pca a PCA object, as returned by run_pca
+#' @param type which type of element you wish to plot ("var" or "ind")
+#' @param i factorial axis represented as x (defaults to "Dim.1")
+#' @param j factorial axis represented as y (defaults to "Dim.2")
+#' @return
+#' @export
+plot_pca <- function(pca, type="var", i="Dim.1", j="Dim.2"){
+  pcadata=pca[[type]]$coord %>%
+    as.data.frame() %>% 
+    tibble::rownames_to_column("name")%>% 
+    tibble::as_tibble() 
+  plot=ggplot2::ggplot(data=pcadata,
+                       ggplot2::aes(.data[[i]],y=.data[[j]]))
+  ### Type var
+  if(type=="var"){
+     if(!is.null(pca$quali.sup.name)){
+          dataquali=pca$quali.sup$coord %>%  
+            as.data.frame() %>% 
+            dplyr::mutate_all(rescale) %>% 
+            tibble::rownames_to_column("group") 
+          print(dataquali)
+          plot=plot +
+            ggplot2::geom_text(data=dataquali,
+                               ggplot2::aes(x=.data[[i]],y=.data[[j]],
+                                            label=group,col=group))
+      }
+    plot=plot+
+      ggplot2::geom_segment(ggplot2::aes(x=0,y=0, xend=.data[[i]],yend=.data[[j]]),
+                            arrow = ggplot2::arrow(length = ggplot2::unit(0.1,"cm")),
+                            col="grey")+
+      ggplot2::geom_text(ggplot2::aes(x=1.1*.data[[i]], y=1.1*.data[[j]], label=name))
+
+  }
+  # Type ind
+  if(type=="ind"){
+    if(!is.null(pca$quali.sup.name)){
+        pcadata=pcadata %>% 
+          dplyr::mutate(group=pca$quali.sup.value)
+        geom=ggplot2::geom_text(data=pcadata,
+                             ggplot2::aes(x=.data[[i]],y=.data[[j]],
+                                          label=name,col=group))
+    }else{
+      geom=ggplot2::geom_text(ggplot2::aes(x=.data[[i]], y=.data[[j]],
+                                  label=name))
+    }
+    plot=plot+geom
+  } # end type ind
+  plot=plot+
+    ggplot2::scale_x_continuous(limits=range(pcadata[[i]]*1.2))+
+    ggplot2::scale_y_continuous(limits=range(pcadata[[j]]*1.2))
+  
+  return(plot)
+}
+```
+  
+```{r example-plot_pca}
+data(all_cities)
+mypca=run_pca(all_cities,quali.sup="clco")
+plot_pca(mypca, type="var")
+plot_pca(mypca,type="ind")
+
+all_cities_clust=run_hclust(all_cities, nclust=15)
+mypca=run_pca(all_cities_clust,quali.sup="cluster")
+plot_pca(mypca,type="var")
+plot_pca(mypca,type="ind")
+```
+  
+```{r tests-plot_pca}
+test_that("plot_pca works", {
+  expect_true(inherits(plot_pca, "function")) 
+})
+```
+

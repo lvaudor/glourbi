@@ -1,0 +1,29 @@
+Package: glourbi
+Title: Glourbi: A Package To Support The GloUrb ANR Project Results
+Version: 0.0.0.9000
+Authors@R: 
+    person("Lise", "Vaudor", , "lise.vaudor@ens-lyon.fr", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-1844-6425"))
+Description: This package gathers functions to display the GloUrb results.
+License: MIT + file LICENSE
+Depends: 
+    R (>= 2.10)
+Imports: 
+    dplyr,
+    FactoMineR,
+    ggplot2,
+    glue,
+    magrittr (>= 2.0.3),
+    shiny (>= 1.7.4),
+    tibble
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat
+VignetteBuilder: 
+    knitr
+Config/fusen/version: 0.5.0.9008
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
