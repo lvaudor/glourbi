@@ -5,7 +5,7 @@
 #' @param type which type of element you wish to plot ("var" or "ind")
 #' @param i factorial axis represented as x (defaults to "Dim.1")
 #' @param j factorial axis represented as y (defaults to "Dim.2")
-#' @return
+#' @return a PCA plot of individuals or variables
 #' @export
 #' @examples
 #' data(all_cities)

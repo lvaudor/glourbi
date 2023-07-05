@@ -6,7 +6,7 @@
 #' 
 #' @noRd
 #' @examples
-#' norm_data(all_cities)
+#' glourbi:::norm_data(all_cities)
 norm_data <- function(dataset, label="name"){
   # Keep only complete rows
   datacomp=dataset %>% 
