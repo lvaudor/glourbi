@@ -40,7 +40,7 @@ sep_data <- function(dataset){
   # Keep only variables used for calculations of PCA
   vars_id="name"
   vars_des=c("Urban.Aggl","ID","Latitude","Longitude",
-             "Continent","Country.Co","City.Code","clco","biom",
+             "Continent","Country.Co","City.Code","clco","biom","clim",
              "plain_area","plain_perc")
   vars_num=colnames(dataset)[which(!(colnames(dataset) %in% c(vars_id,vars_des)))]
   return(list(dataset=dataset,
@@ -106,7 +106,7 @@ test_that("norm_data works", {
     
 ```{r function-run_pca}
 #' Runs a PCA on dataset
-#' @return
+#' @return a PCA object
 #' 
 #' @export
 run_pca <- function(dataset, quali.sup=NULL){
@@ -147,7 +147,9 @@ test_that("run_pca works", {
     
 ```{r function-rescale}
 #' Rescale numerical values so that they are centered around 0 and fall between -maxval and maxval
-#' @return
+#' @param x a numerical vector
+#' @param maxval a scalar such that returned vector falls between -maxval and + maxval
+#' @return a scaled vector 
 #' 
 #' @export
 rescale=function(x,maxval=1){
@@ -174,10 +176,10 @@ test_that("rescale works", {
     
 ```{r function-run_hclust}
 #' Runs a hierarchical clustering on dataset
-#' @dataset dataset name
-#' @nclust number of clusters
+#' @param dataset dataset name
+#' @param nclust number of clusters
 #' 
-#' @return
+#' @return a dataset in which a new variable exists documenting classes (nclust clusters)
 #' 
 #' @export
 run_hclust <- function(dataset, nclust=5,namevar="cluster"){
@@ -194,7 +196,7 @@ run_hclust <- function(dataset, nclust=5,namevar="cluster"){
       dplyr::mutate(cluster=paste0("cl",
                                    sprintf(glue::glue("%0{ndigits}d"),
                                            cluster))) %>% 
-      dplyr::select(name,everything())
+      dplyr::select(name,cluster,everything())
     return(datan)
 }
 ```
@@ -218,7 +220,7 @@ test_that("run_hclust works", {
 #' @param type which type of element you wish to plot ("var" or "ind")
 #' @param i factorial axis represented as x (defaults to "Dim.1")
 #' @param j factorial axis represented as y (defaults to "Dim.2")
-#' @return
+#' @return a PCA plot of individuals or variables
 #' @export
 plot_pca <- function(pca, type="var", i="Dim.1", j="Dim.2"){
   pcadata=pca[[type]]$coord %>%
@@ -286,4 +288,6 @@ test_that("plot_pca works", {
   expect_true(inherits(plot_pca, "function")) 
 })
 ```
+
+
 

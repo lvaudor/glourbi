@@ -15,7 +15,7 @@ sep_data <- function(dataset){
   # Keep only variables used for calculations of PCA
   vars_id="name"
   vars_des=c("Urban.Aggl","ID","Latitude","Longitude",
-             "Continent","Country.Co","City.Code","clco","biom",
+             "Continent","Country.Co","City.Code","clco","biom","clim",
              "plain_area","plain_perc")
   vars_num=colnames(dataset)[which(!(colnames(dataset) %in% c(vars_id,vars_des)))]
   return(list(dataset=dataset,

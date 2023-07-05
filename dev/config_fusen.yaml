@@ -23,6 +23,25 @@ flat_full.Rmd:
     check: true
     document: true
     overwrite: ask
+flat_global_map.Rmd:
+  path: dev/flat_global_map.Rmd
+  state: active
+  R:
+  - R/form_palette.R
+  - R/global_map.R
+  - R/plot_palette.R
+  tests:
+  - tests/testthat/test-form_palette.R
+  - tests/testthat/test-plot_palette.R
+  - tests/testthat/test-global_map.R
+  vignettes: vignettes/get-started.Rmd
+  inflate:
+    flat_file: dev/flat_global_map.Rmd
+    vignette_name: Get started
+    open_vignette: true
+    check: true
+    document: true
+    overwrite: ask
 flat_shiny.Rmd:
   path: dev/flat_shiny.Rmd
   state: active
