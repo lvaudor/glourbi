@@ -48,7 +48,7 @@ sep_data(all_cities)
   
 
 ```{r example-norm_data}
-glourbi:::norm_data(all_cities)
+norm_data(all_cities)
 ```
 
   

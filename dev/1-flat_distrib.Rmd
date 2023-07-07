@@ -95,8 +95,6 @@ plot_distrib <- function(dataset=all_cities,varname, byclass=FALSE){
  } 
  if(varname %in% sep_data(dataset)$vars_num){
    datacol=form_palette(dataset,varname)
-   colvalues=datacol$colors
-   names(colvalues)=datacol$categories)
    plot=plot+
     ggplot2::geom_rect(data=datacol,
                        ggplot2::aes(x=NULL,y=NULL,
@@ -106,8 +104,7 @@ plot_distrib <- function(dataset=all_cities,varname, byclass=FALSE){
                                     fill=colors))+
     ggplot2::scale_fill_manual(values=datacol$colors)+
     ggplot2::geom_density(data=dataset)+
-    ggplot2::theme(legend.position="none")+
-    ggplot2::scale_x_continuous(limits=range(x))
+    ggplot2::theme(legend.position="none")
  }
  if(varname %in% sep_data(dataset)$vars_cat){
    plot=plot+

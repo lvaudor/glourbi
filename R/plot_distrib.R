@@ -18,18 +18,28 @@ plot_distrib <- function(dataset=all_cities,varname, byclass=FALSE){
  dataset=dataset %>% 
    dplyr::mutate(xdistrib=.[[varname]])
  plot=ggplot2::ggplot(dataset,ggplot2::aes(x=xdistrib))
-
+  if(byclass){
+   plot=plot +
+    ggplot2::facet_grid(rows=ggplot2::vars(cluster))+
+     ggplot2::xlab(varname)
+ } 
  if(varname %in% sep_data(dataset)$vars_num){
+   datacol=form_palette(dataset,varname)
    plot=plot+
-    ggplot2::geom_histogram()
+    ggplot2::geom_rect(data=datacol,
+                       ggplot2::aes(x=NULL,y=NULL,
+                                    xmin=catmin,
+                                    xmax=catmax,
+                                    ymin=0,ymax=1,
+                                    fill=colors))+
+    ggplot2::scale_fill_manual(values=datacol$colors)+
+    ggplot2::geom_density(data=dataset)+
+    ggplot2::theme(legend.position="none")
  }
  if(varname %in% sep_data(dataset)$vars_cat){
    plot=plot+
     ggplot2::geom_bar()
  }
- if(byclass){
-   plot=plot +
-    ggplot2::facet_grid(rows=ggplot2::vars(cluster))
- } 
+
  return(plot)
 }

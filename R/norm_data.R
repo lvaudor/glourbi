@@ -2,12 +2,14 @@
 
 #' Normalize columns of a dataset (in case they are numeric)
 #' @param dataset a dataset
+#' @param label the name of the variable used to label individuals. Defaults to "name"
+#' @param type the type of normalization. Can be either "center_and_scale" or "rank". Defaults to "rank"
+#' @export
 #' @return a normalized dataset in which all numeric variables have been centered and scaled
 #' 
-#' @noRd
 #' @examples
-#' glourbi:::norm_data(all_cities)
-norm_data <- function(dataset, label="name"){
+#' norm_data(all_cities)
+norm_data <- function(dataset, label="name", type="rank"){
   # Keep only complete rows
   datacomp=dataset %>% 
     sep_data() %>% 
@@ -16,14 +18,20 @@ norm_data <- function(dataset, label="name"){
     sep_data() %>% 
     .$vars_num
   
-  dataset_num=datacomp[,vars_num]
-  
-  # All numeric variables are centered and scaled
-  dataset_norm=dataset_num %>% 
-    dplyr::select_if(is.numeric) %>% 
-    dplyr::mutate_all(~.-mean(.)) %>%
-    dplyr::mutate_all(~./sd(.)) %>% 
+  dataset_norm=datacomp[,vars_num] %>% 
+    dplyr::select_if(is.numeric)
+  if(type=="rank"){
+    dataset_norm=dataset_norm %>% 
+      dplyr::mutate_all(~rank(.)) 
+  }
+  if(type=="center_and_scale"){
+    dataset_norm=dataset_norm %>% 
+      dplyr::mutate_all(~.-mean(.)) %>%
+      dplyr::mutate_all(~./sd(.)) 
+  }
+  dataset_norm=dataset_norm %>% 
     dplyr::mutate(name=datacomp[[label]]) %>% 
     tibble::column_to_rownames({{label}})
+  
   return(dataset_norm)
 }
