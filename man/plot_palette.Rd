@@ -4,9 +4,11 @@
 \alias{plot_palette}
 \title{Plots the legend showing values for a color palette}
 \usage{
-plot_palette(varname)
+plot_palette(dataset = all_cities, varname)
 }
 \arguments{
+\item{dataset}{a dataset, defaults to all_cities}
+
 \item{varname}{a string corresponding to one of the variables in all_cities.}
 }
 \value{
@@ -17,6 +19,6 @@ Plots the legend showing values for a color palette
 }
 \examples{
 data(all_cities)
-plot_palette("clim")
-plot_palette("X2018")
+plot_palette(all_cities,"clim")
+plot_palette(all_cities,"X2018")
 }

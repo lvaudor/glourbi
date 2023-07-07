@@ -1,0 +1,205 @@
+---
+title: "flat_global_map.Rmd empty"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r development, include=FALSE}
+library(testthat)
+```
+
+```{r development-load}
+# Load already included functions if relevant
+pkgload::load_all(export_all = FALSE)
+```
+
+# fun_palette
+    
+```{r function-fun_palette}
+#' Build a palette function
+#' @param dataset a dataset, defaults to all_cities
+#' @param varname a string corresponding to one of the variables in all_cities.
+#' @return a function
+#' 
+#' @export
+fun_palette <- function(dataset=all_cities,varname){
+  vars=sep_data(dataset)
+  x=dataset[[varname]]
+  # For categorical variables
+  if(varname %in% vars$vars_cat){
+     pal=function(x){
+       nb.cols = length(levels(x))
+       # get a list of colors according to the total number of factor levels
+       colslist = grDevices::colorRampPalette(RColorBrewer::brewer.pal(8, "Set2"))(nb.cols)
+       # assign color to each element of x
+       cols=colslist[as.numeric(x)]
+       return(cols)
+     }
+  }
+  # For numerical variables
+  if(varname %in% vars$vars_num){
+        pal=function(x){
+             # get a list of colors according to the total number of factor levels
+             colslist = grDevices::colorRampPalette(RColorBrewer::brewer.pal(8,"PuBuGn"))(10)
+             # assign color to each element of x
+             cutx=cut(x,quantile(x,seq(0,1,by=0.1)),include.lowest=TRUE)
+             cols=colslist[as.numeric(cutx)]
+             return(cols)
+        }
+  }
+  # For other variables
+  if(!(varname %in% c(vars$vars_cat,vars$vars_num))){
+      pal=function(x){return("#FF0000",length(x))}
+  }
+  return(pal)
+}
+```
+  
+```{r example-fun_palette}
+fun_palette(all_cities,"clim")
+```
+  
+```{r tests-fun_palette}
+test_that("fun_palette works", {
+  expect_true(inherits(fun_palette, "function")) 
+})
+```
+  
+
+# form_palette
+    
+```{r function-form_palette}
+#' Form a color palette function for a categorical variable
+#' @param dataset a dataset, defaults to all_cities
+#' @param varname a string corresponding to one of the variables in all_cities.
+#' @return a palette function
+#' @export
+#' @noRd
+form_palette=function(dataset=all_cities,varname){
+  vars=sep_data(dataset)
+  x=dataset[[varname]]
+  
+  pal=fun_palette(dataset,varname)
+  # For categorical variables
+  if(varname %in% vars$vars_cat){
+     datacol=tibble::tibble(categories= dataset[[varname]]) %>% 
+       unique() %>% 
+       dplyr::mutate(colors=pal(categories))
+  }
+  # For numerical variables
+  if(varname %in% vars$vars_num){
+    q=quantile(x,seq(0,1,by=0.1))
+    datacol=tibble::tibble(x,
+                           categories=cut(x,q,include.lowest=T)) %>% 
+      dplyr::mutate(colors=pal(x)) %>% 
+      dplyr::group_by(categories) %>% 
+      dplyr::summarise(colors=unique(colors)) %>% 
+      dplyr::arrange(categories) %>% 
+      dplyr::mutate(catmin=q[1:10],
+                    catmax=q[2:11])
+    names(datacol$colors)=datacol$categories
+  }
+  # For other variables
+  if(!(varname %in% c(vars$vars_cat,vars$vars_num))){
+    datacol=tibble::tibble(categories= dataset[[varname]]) %>% 
+       dplyr::group_by(categories) %>%  
+       dplyr::summarise(colors=pal(categories)) %>% 
+       dplyr::arrange(categories)
+    
+  }
+  return(datacol)
+}
+
+```
+  
+```{r example-form_palette}
+datacol=form_palette(all_cities,"X2018")
+datacol
+
+datacol=form_palette(all_cities,"clim")
+datacol
+```
+  
+```{r tests-form_palette}
+test_that("form_palette works", {
+  expect_true(inherits(form_palette, "function")) 
+  result_quanti=glourbi:::form_palette(all_cities,"X2018")
+  result_quali=glourbi:::form_palette(all_cities,"clim")
+})
+```
+  
+# plot_palette
+    
+```{r function-plot_palette}
+#' Plots the legend showing values for a color palette
+#' @param dataset a dataset, defaults to all_cities
+#' @param varname a string corresponding to one of the variables in all_cities.
+#' @return a plot
+#' 
+#' @export
+plot_palette=function(dataset=all_cities,varname){
+  datacol=form_palette(dataset,varname) 
+
+  ggplot2::ggplot(datacol,
+                  ggplot2::aes(x=categories, y=1,fill=categories))+
+    ggplot2::geom_bar(stat="identity")+
+    ggplot2::geom_text(ggplot2::aes(x=1:length(categories),
+                                    y=0.5,
+                                    label=categories))+
+    ggplot2::scale_fill_manual(values=datacol$colors)+
+    ggplot2::coord_flip()+
+    ggplot2::xlab(varname)+
+    ggplot2::theme_void()+
+    ggplot2::theme(legend.position="none")
+  }
+```
+  
+```{r example-plot_palette}
+data(all_cities)
+plot_palette(all_cities,"clim")
+plot_palette(all_cities,"X2018")
+```
+  
+```{r tests-plot_palette}
+test_that("plot_palette works", {
+  expect_true(inherits(plot_palette, "function")) 
+})
+```
+    
+
+
+# global_map
+
+```{r function-global_map}
+#' global_map Title
+
+#' @param dataset a dataset, defaults to all_cities
+#' @param varname a string corresponding to one of the variables in all_cities. Defaults to X2018
+#' @return a leaflet map
+#' @export
+#'
+#' @examples
+global_map <- function(dataset=all_cities,varname="X2018") {
+  vars=sep_data(dataset)
+  pal=fun_palette(dataset,varname)
+  datamap=dataset %>% 
+    dplyr::mutate(colors=pal(dataset[[varname]]))
+  map= leaflet::leaflet(datamap) %>% 
+       leaflet::addTiles() %>% 
+       leaflet::addCircleMarkers(col=~colors,
+                                 popup=~name)
+  return(map)
+}
+```
+
+```{r examples-global_map}
+global_map(all_cities,"X2018")
+```
+
+```{r tests-global_map}
+test_that("global_map works", {
+  expect_true(inherits(plot_palette, "function")) 
+})
+```
+

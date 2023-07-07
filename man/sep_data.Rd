@@ -7,11 +7,10 @@
 sep_data(dataset)
 }
 \arguments{
-\item{dataset}{a dataset
-Description}
+\item{dataset}{a dataset with varnames comparable to all_cities}
 }
 \value{
-a list with elements vars_id, vars_des,vars_num
+a list with elements vars_id, vars_des, vars_cat, vars_num
 }
 \description{
 A function that separates variables in the dataset into 3 groups: identifying (vars_id), descriptive (vars_des), numeric (vars_num)

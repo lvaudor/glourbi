@@ -4,9 +4,11 @@
 \alias{global_map}
 \title{global_map Title}
 \usage{
-global_map(varname = "X2018")
+global_map(dataset = all_cities, varname = "X2018")
 }
 \arguments{
+\item{dataset}{a dataset, defaults to all_cities}
+
 \item{varname}{a string corresponding to one of the variables in all_cities. Defaults to X2018}
 }
 \value{
@@ -16,5 +18,5 @@ a leaflet map
 global_map Title
 }
 \examples{
-global_map("X2018")
+global_map(all_cities,"X2018")
 }

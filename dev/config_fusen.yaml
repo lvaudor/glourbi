@@ -1,5 +1,20 @@
-flat_full.Rmd:
-  path: dev/flat_full.Rmd
+1-flat_distrib.Rmd:
+  path: dev/1-flat_distrib.Rmd
+  state: active
+  R:
+  - R/plot_distrib.R
+  - R/all_cities.R
+  tests: tests/testthat/test-plot_distrib.R
+  vignettes: vignettes/get-started.Rmd
+  inflate:
+    flat_file: dev/1-flat_distrib.Rmd
+    vignette_name: Get started
+    open_vignette: true
+    check: true
+    document: true
+    overwrite: ask
+2-flat_stat.Rmd:
+  path: dev/2-flat_stat.Rmd
   state: active
   R:
   - R/norm_data.R
@@ -15,47 +30,40 @@ flat_full.Rmd:
   - tests/testthat/test-rescale.R
   - tests/testthat/test-run_hclust.R
   - tests/testthat/test-plot_pca.R
-  vignettes: vignettes/get-started.Rmd
+  vignettes: vignettes/statistical-methods.Rmd
   inflate:
-    flat_file: dev/flat_full.Rmd
-    vignette_name: Get started
+    flat_file: dev/2-flat_stat.Rmd
+    vignette_name: Statistical methods
     open_vignette: true
     check: true
     document: true
     overwrite: ask
-flat_global_map.Rmd:
-  path: dev/flat_global_map.Rmd
+3-flat_global_map.Rmd:
+  path: dev/3-flat_global_map.Rmd
   state: active
   R:
   - R/form_palette.R
+  - R/fun_palette.R
   - R/global_map.R
   - R/plot_palette.R
   tests:
+  - tests/testthat/test-fun_palette.R
   - tests/testthat/test-form_palette.R
   - tests/testthat/test-plot_palette.R
   - tests/testthat/test-global_map.R
   vignettes: vignettes/get-started.Rmd
   inflate:
-    flat_file: dev/flat_global_map.Rmd
+    flat_file: dev/3-flat_global_map.Rmd
     vignette_name: Get started
     open_vignette: true
     check: true
     document: true
     overwrite: ask
-flat_shiny.Rmd:
-  path: dev/flat_shiny.Rmd
+keep:
+  path: keep
   state: active
   R:
-  - R/app_server.R
-  - R/app_ui.R
-  tests:
-  - tests/testthat/test-app_ui.R
-  - tests/testthat/test-app_server.R
-  vignettes: vignettes/get-started.Rmd
-  inflate:
-    flat_file: dev/flat_shiny.Rmd
-    vignette_name: Get started
-    open_vignette: true
-    check: true
-    document: true
-    overwrite: ask
+  - R/glourbi-package.R
+  - R/utils-pipe.R
+  tests: []
+  vignettes: []

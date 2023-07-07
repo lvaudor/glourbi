@@ -28,10 +28,8 @@ pkgload::load_all(export_all = FALSE)
     
 ```{r function-sep_data}
 #' A function that separates variables in the dataset into 3 groups: identifying (vars_id), descriptive (vars_des), numeric (vars_num)
-#' @param dataset a dataset
-#' Description
-#' 
-#' @return a list with elements vars_id, vars_des,vars_num
+#' @param dataset a dataset with varnames comparable to all_cities
+#' @return a list with elements vars_id, vars_des, vars_cat, vars_num
 #' 
 #' @export
 sep_data <- function(dataset){
@@ -40,12 +38,15 @@ sep_data <- function(dataset){
   # Keep only variables used for calculations of PCA
   vars_id="name"
   vars_des=c("Urban.Aggl","ID","Latitude","Longitude",
-             "Continent","Country.Co","City.Code","clco","biom","clim",
+             "Continent","Country.Co","City.Code",
              "plain_area","plain_perc")
-  vars_num=colnames(dataset)[which(!(colnames(dataset) %in% c(vars_id,vars_des)))]
+  vars_cat=c("clco","biom","clim")
+  if("cluster" %in% colnames(dataset)){vars_cat=c(vars_cat,"cluster")}
+  vars_num=colnames(dataset)[which(!(colnames(dataset) %in% c(vars_id,vars_des,vars_cat)))]
   return(list(dataset=dataset,
               vars_id=vars_id,
               vars_des=vars_des,
+              vars_cat=vars_cat,
               vars_num=vars_num))
 }
 ```
@@ -68,9 +69,11 @@ test_that("sep_data works", {
 ```{r function-norm_data}
 #' Normalize columns of a dataset (in case they are numeric)
 #' @param dataset a dataset
+#' @param label the name of the variable used to label individuals. Defaults to "name"
+#' @param type the type of normalization. Can be either "center_and_scale" or "rank". Defaults to "rank"
 #' @return a normalized dataset in which all numeric variables have been centered and scaled
 #' 
-norm_data <- function(dataset, label="name"){
+norm_data <- function(dataset, label="name", type="rank"){
   # Keep only complete rows
   datacomp=dataset %>% 
     sep_data() %>% 
@@ -79,21 +82,27 @@ norm_data <- function(dataset, label="name"){
     sep_data() %>% 
     .$vars_num
   
-  dataset_num=datacomp[,vars_num]
-  
-  # All numeric variables are centered and scaled
-  dataset_norm=dataset_num %>% 
-    dplyr::select_if(is.numeric) %>% 
-    dplyr::mutate_all(~.-mean(.)) %>%
-    dplyr::mutate_all(~./sd(.)) %>% 
+  dataset_norm=datacomp[,vars_num] %>% 
+    dplyr::select_if(is.numeric)
+  if(type=="rank"){
+    dataset_norm=dataset_norm %>% 
+      dplyr::mutate_all(~rank(.)) 
+  }
+  if(type=="center_and_scale"){
+    dataset_norm=dataset_norm %>% 
+      dplyr::mutate_all(~.-mean(.)) %>%
+      dplyr::mutate_all(~./sd(.)) 
+  }
+  dataset_norm=dataset_norm %>% 
     dplyr::mutate(name=datacomp[[label]]) %>% 
     tibble::column_to_rownames({{label}})
+  
   return(dataset_norm)
 }
 ```
   
 ```{r example-norm_data}
-glourbi:::norm_data(all_cities)
+norm_data(all_cities)
 ```
   
 ```{r tests-norm_data}
@@ -189,14 +198,13 @@ run_hclust <- function(dataset, nclust=5,namevar="cluster"){
     datan=glourbi:::norm_data(dataset)
     distobj=dist(datan)
     tree=hclust(distobj)
-    datan=datan %>% 
-      tibble::rownames_to_column("name") %>% 
-      tibble::as_tibble() %>% 
+    datan=dataset %>% 
       dplyr::mutate(cluster=cutree(tree,k=nclust)) %>% 
       dplyr::mutate(cluster=paste0("cl",
                                    sprintf(glue::glue("%0{ndigits}d"),
-                                           cluster))) %>% 
-      dplyr::select(name,cluster,everything())
+                                           cluster)))%>% 
+      dplyr::mutate(cluster=as.factor(cluster)) %>% 
+      dplyr::select(name,cluster,dplyr::everything())
     return(datan)
 }
 ```
@@ -208,7 +216,10 @@ all_cities_clust=run_hclust(all_cities)
   
 ```{r tests-run_hclust}
 test_that("run_hclust works", {
-  expect_true(inherits(run_hclust, "function")) 
+    expect_true(inherits(run_hclust, "function")) 
+    all_cities_clust=run_hclust(all_cities)
+    expect_s3_class(all_cities_clust,"tbl_df")
+  
 })
 ```
   

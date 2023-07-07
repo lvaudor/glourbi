@@ -16,8 +16,16 @@ all_cities=all_cities %>%
   mutate(biom=as.factor(biom),
          clco=as.factor(clco),
          clim=as.factor(clim)
-         )
+         ) %>%
+  na.omit()
 
 usethis::use_data(all_cities, overwrite = TRUE)
+
+
+##
+meta_all_cities=readr::read_delim("data-raw/GHS_all_complete_subset_README.txt",
+                                  delim = ";",
+                                  escape_double = FALSE, trim_ws = TRUE)
+usethis::use_data(meta_all_cities, overwrite=TRUE)
 
 
