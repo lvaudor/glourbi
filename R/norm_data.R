@@ -4,9 +4,8 @@
 #' @param dataset a dataset
 #' @param label the name of the variable used to label individuals. Defaults to "name"
 #' @param type the type of normalization. Can be either "center_and_scale" or "rank". Defaults to "rank"
-#' @export
 #' @return a normalized dataset in which all numeric variables have been centered and scaled
-#' 
+#' @export
 #' @examples
 #' norm_data(all_cities)
 norm_data <- function(dataset, label="name", type="rank"){

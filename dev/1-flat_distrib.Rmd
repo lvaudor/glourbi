@@ -87,28 +87,30 @@ plot_distrib <- function(dataset=all_cities,varname, byclass=FALSE){
  vars=sep_data(dataset)
  dataset=dataset %>% 
    dplyr::mutate(xdistrib=.[[varname]])
- plot=ggplot2::ggplot(dataset,ggplot2::aes(x=xdistrib))
+ datacol=form_palette(dataset,varname)
+ plot=ggplot2::ggplot(dataset,
+                      ggplot2::aes(x=xdistrib))+
+     ggplot2::xlab(varname)
   if(byclass){
    plot=plot +
-    ggplot2::facet_grid(rows=ggplot2::vars(cluster))+
-     ggplot2::xlab(varname)
+    ggplot2::facet_grid(rows=ggplot2::vars(cluster))
  } 
  if(varname %in% sep_data(dataset)$vars_num){
-   datacol=form_palette(dataset,varname)
-   plot=plot+
+   plot=plot +
+    ggplot2::geom_density(lwd=1)+
     ggplot2::geom_rect(data=datacol,
                        ggplot2::aes(x=NULL,y=NULL,
                                     xmin=catmin,
                                     xmax=catmax,
-                                    ymin=0,ymax=1,
-                                    fill=colors))+
+                                    ymin=-Inf,ymax=+Inf,
+                                    fill=categories),alpha=0.25)+
     ggplot2::scale_fill_manual(values=datacol$colors)+
-    ggplot2::geom_density(data=dataset)+
     ggplot2::theme(legend.position="none")
  }
  if(varname %in% sep_data(dataset)$vars_cat){
    plot=plot+
-    ggplot2::geom_bar()
+    ggplot2::geom_bar(stat="count", ggplot2::aes(fill=xdistrib))+
+    ggplot2::scale_fill_manual(values=datacol$colors)
  }
 
  return(plot)

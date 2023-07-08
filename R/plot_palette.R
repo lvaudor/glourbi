@@ -12,7 +12,7 @@
 #' plot_palette(all_cities,"X2018")
 plot_palette=function(dataset=all_cities,varname){
   datacol=form_palette(dataset,varname) 
-
+  
   ggplot2::ggplot(datacol,
                   ggplot2::aes(x=categories, y=1,fill=categories))+
     ggplot2::geom_bar(stat="identity")+

@@ -20,8 +20,8 @@ form_palette=function(dataset=all_cities,varname){
   # For categorical variables
   if(varname %in% vars$vars_cat){
      datacol=tibble::tibble(categories= dataset[[varname]]) %>% 
-       unique() %>% 
-       dplyr::mutate(colors=pal(categories))
+       dplyr::group_by(categories) %>% 
+       dplyr::summarise(colors=pal(unique(categories)))
   }
   # For numerical variables
   if(varname %in% vars$vars_num){

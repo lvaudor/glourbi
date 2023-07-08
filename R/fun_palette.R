@@ -16,7 +16,7 @@ fun_palette <- function(dataset=all_cities,varname){
      pal=function(x){
        nb.cols = length(levels(x))
        # get a list of colors according to the total number of factor levels
-       colslist = grDevices::colorRampPalette(RColorBrewer::brewer.pal(8, "Set2"))(nb.cols)
+       colslist = rev(grDevices::colorRampPalette(RColorBrewer::brewer.pal(8, "RdYlBu"))(nb.cols))
        # assign color to each element of x
        cols=colslist[as.numeric(x)]
        return(cols)
