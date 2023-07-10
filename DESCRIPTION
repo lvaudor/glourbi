@@ -16,6 +16,7 @@ Imports:
     grDevices,
     leaflet,
     magrittr (>= 2.0.3),
+    plotly,
     RColorBrewer,
     tibble
 Suggests: 
