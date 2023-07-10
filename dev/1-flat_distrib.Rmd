@@ -90,7 +90,8 @@ plot_distrib <- function(dataset=all_cities,varname, byclass=FALSE){
  datacol=form_palette(dataset,varname)
  plot=ggplot2::ggplot(dataset,
                       ggplot2::aes(x=xdistrib))+
-     ggplot2::xlab(varname)
+     ggplot2::xlab(varname)+
+     ggplot2::theme(legend.position="none")
   if(byclass){
    plot=plot +
     ggplot2::facet_grid(rows=ggplot2::vars(cluster))
@@ -105,7 +106,8 @@ plot_distrib <- function(dataset=all_cities,varname, byclass=FALSE){
                                     ymin=-Inf,ymax=+Inf,
                                     fill=categories),alpha=0.25)+
     ggplot2::scale_fill_manual(values=datacol$colors)+
-    ggplot2::theme(legend.position="none")
+    ggplot2::theme(legend.position="none")+
+    ggplot2::scale_x_log10()
  }
  if(varname %in% sep_data(dataset)$vars_cat){
    plot=plot+

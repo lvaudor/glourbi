@@ -14,6 +14,35 @@ library(testthat)
 pkgload::load_all(export_all = FALSE)
 ```
 
+# categorize
+    
+```{r function-categorize}
+#' Categorize quantitative variable into categories based on deciles
+#' @param dataset a dataset, defaults to all_cities
+#' @param varname a string corresponding to one of the variables in all_cities.
+#' @return a categorized vector
+#' 
+#' @export
+categorize <- function(dataset=all_cities, varname){
+  if(varname %in% sep_data(dataset)$vars_num){
+    x=dataset[[varname]]
+    result=cut(x, quantile(x,seq(0,1,by=0.1)),include.lowest=TRUE)
+  return(result)
+  }
+}
+```
+  
+```{r example-categorize}
+categorize(all_cities,"X2018")
+```
+  
+```{r tests-categorize}
+test_that("categorize works", {
+  expect_true(inherits(categorize, "function")) 
+})
+```
+  
+
 # fun_palette
     
 ```{r function-fun_palette}
@@ -57,6 +86,7 @@ fun_palette <- function(dataset=all_cities,varname){
 ```
   
 ```{r example-fun_palette}
+fun_palette(all_cities,"X2018")
 fun_palette(all_cities,"clim")
 ```
   
