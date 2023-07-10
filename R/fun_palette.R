@@ -7,6 +7,7 @@
 #' 
 #' @export
 #' @examples
+#' fun_palette(all_cities,"X2018")
 #' fun_palette(all_cities,"clim")
 fun_palette <- function(dataset=all_cities,varname){
   vars=sep_data(dataset)

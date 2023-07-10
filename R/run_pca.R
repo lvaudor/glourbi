@@ -9,6 +9,7 @@
 #' mypca=run_pca(all_cities)
 #' all_cities_clust=run_hclust(all_cities)
 #' mypca=run_pca(all_cities_clust, quali.sup="cluster")
+#' mypca=run_pca(all_cities_clust,quali.sup="X2018")
 run_pca <- function(dataset, quali.sup=NULL){
   datacomp=dataset %>% 
     sep_data() %>% 
@@ -17,14 +18,24 @@ run_pca <- function(dataset, quali.sup=NULL){
     glourbi:::norm_data() 
     
   if(!is.null(quali.sup)){
+    if(quali.sup %in% sep_data(dataset)$vars_cat){
+        quali.sup.value=datacomp[[quali.sup]]
+    }
+    if(quali.sup %in% sep_data(dataset)$vars_num){
+        quali.sup.value=categorize(dataset,quali.sup)
+    }
     dataset_num=dataset_num %>% 
-      dplyr::mutate({{quali.sup}}:=as.factor(datacomp[[quali.sup]]))
+          dplyr::mutate({{quali.sup}}:=as.factor(quali.sup.value))
     num_quali.sup=which(colnames(dataset_num)==quali.sup)
   }else{num_quali.sup=NULL}
     
   pca=FactoMineR::PCA(dataset_num,
-                      quali.sup=num_quali.sup)
+                      quali.sup=num_quali.sup,
+                      graph=FALSE)
+  # Additional info regarding quali.sup (quali.sup might be NULL)
   pca$quali.sup.name=quali.sup
-  if(!is.null(quali.sup)){pca$quali.sup.value=datacomp[[quali.sup]]}
+  if(!is.null(quali.sup)){
+    pca$quali.sup.value=quali.sup.value
+  }
   return(pca)
 }

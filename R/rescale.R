@@ -9,7 +9,6 @@
 #' @examples
 #' rescale(rnorm(100,5,3),maxval=10)
 rescale=function(x,maxval=1){
-      x=x-mean(x, na.rm=TRUE)
       maxval_effective=max(abs(x), na.rm=TRUE)
       ratio=maxval_effective/maxval
       x=x/ratio
