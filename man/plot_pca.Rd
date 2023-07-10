@@ -4,9 +4,11 @@
 \alias{plot_pca}
 \title{Plot the variables on factorial plan (i,j)}
 \usage{
-plot_pca(pca, type = "var", i = "Dim.1", j = "Dim.2")
+plot_pca(dataset, pca, type = "var", i = "Dim.1", j = "Dim.2")
 }
 \arguments{
+\item{dataset}{a dataset on which PCA has been run}
+
 \item{pca}{a PCA object, as returned by run_pca}
 
 \item{type}{which type of element you wish to plot ("var" or "ind")}
@@ -24,11 +26,11 @@ Plot the variables on factorial plan (i,j)
 \examples{
 data(all_cities)
 mypca=run_pca(all_cities,quali.sup="clco")
-plot_pca(mypca, type="var")
-plot_pca(mypca,type="ind")
+plot_pca(all_cities,mypca, type="var")
+plot_pca(all_cities,mypca, type="ind")
 
-all_cities_clust=run_hclust(all_cities, nclust=15)
-mypca=run_pca(all_cities_clust,quali.sup="cluster")
-plot_pca(mypca,type="var")
-plot_pca(mypca,type="ind")
+all_cities_clust=run_hclust(all_cities, nclust=10)
+mypca=run_pca(all_cities_clust,quali.sup="X2018")
+plot_pca(all_cities_clust,mypca,type="var")
+plot_pca(all_cities_clust,mypca,type="ind")
 }

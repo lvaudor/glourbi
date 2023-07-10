@@ -1,2 +1,4 @@
 "type","path","origin"
+"R","R/categorize.R","Possibly deprecated file. Please check its link with detected flat source: dev/3-flat_global_map.Rmd"
+"test","tests/testthat/test-categorize.R","Possibly deprecated file. Please check its link with detected flat source: dev/3-flat_global_map.Rmd"
 "vignette","vignettes/build-map.Rmd","Possibly deprecated file. Please check its link with detected flat source: dev/3-flat_global_map.Rmd"

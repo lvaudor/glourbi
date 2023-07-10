@@ -18,5 +18,6 @@ a function
 Build a palette function
 }
 \examples{
+fun_palette(all_cities,"X2018")
 fun_palette(all_cities,"clim")
 }
