@@ -2,6 +2,7 @@
 
 export("%>%")
 export(categorize)
+export(describe_city)
 export(form_palette)
 export(fun_palette)
 export(global_map)

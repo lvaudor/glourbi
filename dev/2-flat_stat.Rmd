@@ -38,11 +38,12 @@ sep_data <- function(dataset){
   # Keep only variables used for calculations of PCA
   vars_id="name"
   vars_des=c("Urban.Aggl","ID","Latitude","Longitude",
-             "Continent","Country.Co","City.Code",
-             "plain_area","plain_perc")
+             "Continent","Country.Co","City.Code"
+             )
   vars_cat=c("clco","biom","clim")
   if("cluster" %in% colnames(dataset)){vars_cat=c(vars_cat,"cluster")}
-  vars_num=colnames(dataset)[which(!(colnames(dataset) %in% c(vars_id,vars_des,vars_cat)))]
+  vars_num=c("X2018","X1980","pop_growth","pop_mean","Area","plain_area","plain_perc",
+             "disc","alti","prec","hdev")
   return(list(dataset=dataset,
               vars_id=vars_id,
               vars_des=vars_des,

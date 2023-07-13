@@ -131,4 +131,3 @@ test_that("plot_distrib works", {
   expect_true(inherits(plot_distrib, "function")) 
 })
 ```
-  

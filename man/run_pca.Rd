@@ -17,4 +17,5 @@ data(all_cities)
 mypca=run_pca(all_cities)
 all_cities_clust=run_hclust(all_cities)
 mypca=run_pca(all_cities_clust, quali.sup="cluster")
+mypca=run_pca(all_cities_clust,quali.sup="X2018")
 }

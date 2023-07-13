@@ -1,4 +1,6 @@
 "type","path","origin"
 "R","R/categorize.R","Possibly deprecated file. Please check its link with detected flat source: dev/3-flat_global_map.Rmd"
+"R","R/describe_city.R","Possibly deprecated file. Please check its link with detected flat source: dev/1-flat_distrib.Rmd"
 "test","tests/testthat/test-categorize.R","Possibly deprecated file. Please check its link with detected flat source: dev/3-flat_global_map.Rmd"
+"test","tests/testthat/test-describe_city.R","Possibly deprecated file. Please check its link with detected flat source: dev/1-flat_distrib.Rmd"
 "vignette","vignettes/build-map.Rmd","Possibly deprecated file. Please check its link with detected flat source: dev/3-flat_global_map.Rmd"
