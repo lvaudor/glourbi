@@ -128,7 +128,6 @@ form_palette=function(dataset=all_cities,varname){
       dplyr::arrange(categories) %>% 
       dplyr::mutate(catmin=q[1:10],
                     catmax=q[2:11])
-    names(datacol$colors)=datacol$categories
   }
   # For other variables
   if(!(varname %in% c(vars$vars_cat,vars$vars_num))){
@@ -158,7 +157,38 @@ test_that("form_palette works", {
   result_quali=glourbi:::form_palette(all_cities,"clim")
 })
 ```
+
+# get_color
+    
+```{r function-get_color}
+#' Returns the color associated with a certain value of a categorical variable
+#' @param dataset a dataset, defaults to all_cities
+#' @param varname name of the variable considered, as string
+#' @param value name of the value, as string
+#' @return a hex color value
+#' 
+#' @export
+get_color=function(dataset=all_cities,varname,value){
+  result=form_palette(dataset,varname) %>%
+    dplyr::filter(as.vector(categories)==value) %>%
+    dplyr::pull(colors)
+  return(result)
+}
+```
   
+```{r example-get_color}
+get_color(all_cities,"biom","b08")
+all_cities_clust=run_hclust(all_cities,15)
+get_color(all_cities_clust,"cluster","cl12")
+```
+  
+```{r tests-get_color}
+test_that("get_color works", {
+  expect_true(inherits(get_color, "function")) 
+})
+```
+  
+
 # plot_palette
     
 ```{r function-plot_palette}

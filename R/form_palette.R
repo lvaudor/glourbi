@@ -34,7 +34,6 @@ form_palette=function(dataset=all_cities,varname){
       dplyr::arrange(categories) %>% 
       dplyr::mutate(catmin=q[1:10],
                     catmax=q[2:11])
-    names(datacol$colors)=datacol$categories
   }
   # For other variables
   if(!(varname %in% c(vars$vars_cat,vars$vars_num))){

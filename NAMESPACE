@@ -2,8 +2,10 @@
 
 export("%>%")
 export(categorize)
+export(describe_city)
 export(form_palette)
 export(fun_palette)
+export(get_color)
 export(global_map)
 export(norm_data)
 export(plot_distrib)

@@ -17,14 +17,15 @@ Imports:
     leaflet,
     magrittr (>= 2.0.3),
     plotly,
+    purrr,
     RColorBrewer,
-    tibble
+    tibble,
+    tidyr
 Suggests: 
     knitr,
     rmarkdown,
     testthat
-VignetteBuilder: 
-    knitr
+VignetteBuilder: knitr
 Config/fusen/version: 0.5.0.9008
 Encoding: UTF-8
 LazyData: true
