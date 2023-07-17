@@ -15,7 +15,7 @@ Imports:
     glue,
     grDevices,
     leaflet,
-    magrittr (>= 2.0.3),
+    magrittr (>= 2.0.1),
     plotly,
     purrr,
     RColorBrewer,
