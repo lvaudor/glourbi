@@ -244,11 +244,17 @@ global_map <- function(dataset=all_cities,varname="X2018") {
   vars=sep_data(dataset)
   pal=fun_palette(dataset,varname)
   datamap=dataset %>% 
-    dplyr::mutate(colors=pal(dataset[[varname]]))
+    dplyr::mutate(colors=pal(dataset[[varname]])) %>% 
+    dplyr::mutate(alpha=dplyr::case_when(selectA~0,
+                                         TRUE~0.5))
   map= leaflet::leaflet(datamap) %>% 
        leaflet::addTiles() %>% 
-       leaflet::addCircleMarkers(col=~colors,
-                                 popup=~name)
+       leaflet::addCircleMarkers(fillColor=~colors,
+                                 popup=~name,
+                                 layerId=~name,
+                                 stroke=~selectA,
+                                 color="black",
+                                 weight=2)
   return(map)
 }
 ```
