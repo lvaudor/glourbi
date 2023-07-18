@@ -67,7 +67,22 @@ datacol
 
   
 
+# get_color
+
+    
+
   
+
+```{r example-get_color}
+get_color(all_cities,"biom","b08")
+all_cities_clust=run_hclust(all_cities,15)
+get_color(all_cities_clust,"cluster","cl12")
+```
+
+  
+
+  
+
 
 # plot_palette
 
