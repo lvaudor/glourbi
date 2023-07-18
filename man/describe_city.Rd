@@ -19,4 +19,6 @@ Describe all characteristics of a city
 }
 \examples{
 describe_city(all_cities,"Cordoba--Spain")
+all_cities_clust=all_cities \%>\% run_hclust(15)
+describe_city(all_cities_clust,"Cordoba--Spain")
 }

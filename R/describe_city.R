@@ -23,7 +23,7 @@ describe_city <- function(dataset=all_cities,city){
                     index=1:dplyr::n(),
                     text=varname,
                     color="#e9e9e9") %>% 
-      dplyr::mutate(x1=0,x2=1,y1=index-0.5,y2=index+0.5) %>% 
+      dplyr::mutate(x1=0,x2=1,y1=index-0.5,y2=index+1) %>% 
       dplyr::select(type,index,name,varname,value,x1,x2,y1,y2,color,text)
     sepdata=sep_data(dataset)
     dataset_cat=dataset[,c("name",sepdata$vars_cat)]  %>% 
@@ -43,8 +43,12 @@ describe_city <- function(dataset=all_cities,city){
                     y2=index+1) %>%
       dplyr::select(type,index,name,varname,value,
                     x1,x2,y1,y2,color,text)
-  dataset_vars=dplyr::bind_rows(dataset_cat,dataset_num)          
-  
+  dataset_title=tibble::tibble(type="title",index=max(dataset_num$index)+1,
+                               name=city,varname=city,value=NA,
+                               x1=0,x2=1,y1=index,y2=index+1,color=NA,text=city)          
+ 
+  dataset_vars=dplyr::bind_rows(dataset_cat,dataset_num,dataset_title)
+                                  
   plot=
     ggplot2::ggplot(data=dataset_vars)+
     ggplot2::geom_rect(ggplot2::aes(xmin=x1,ymin=y1,xmax=x2,ymax=y2,fill=color),
@@ -55,5 +59,5 @@ describe_city <- function(dataset=all_cities,city){
     ggplot2::scale_x_continuous(limits=c(0,1)) +
     ggplot2::scale_fill_manual(values=set_colors)+
     ggplot2::theme_void()
-  return(suppressWarnings(plot))
+  return(plot)
 }
