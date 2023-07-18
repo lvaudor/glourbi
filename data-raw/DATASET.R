@@ -1,4 +1,7 @@
 library(tidyverse)
+study_areas=sf::st_read("data-raw/study_areas_temp/study_areas_20230713_buffer.shp")
+
+
 ## code to prepare `DATASET` dataset goes here
 all_cities=read_csv("data-raw/GHS_all_complete_subset.csv")
 all_cities=all_cities %>%
@@ -19,7 +22,9 @@ all_cities=all_cities %>%
          clco=as.factor(clco),
          clim=as.factor(clim)
          ) %>%
-  na.omit()
+  na.omit() %>%
+  mutate(selectA=case_when(City.Code %in% study_areas$City.Code~ TRUE,
+                           TRUE~ FALSE))
 
 usethis::use_data(all_cities, overwrite = TRUE)
 
