@@ -15,7 +15,7 @@
 #' plot_pca(all_cities,mypca, type="ind")
 #'
 #' all_cities_clust=run_hclust(all_cities, nclust=10)
-#' mypca=run_pca(all_cities_clust,quali.sup="X2018")
+#' mypca=run_pca(all_cities_clust,quali.sup="cluster")
 #' plot_pca(all_cities_clust,mypca,type="var")
 #' plot_pca(all_cities_clust,mypca,type="ind")
 plot_pca <- function(dataset,pca, type="var", i="Dim.1", j="Dim.2"){
@@ -38,7 +38,9 @@ plot_pca <- function(dataset,pca, type="var", i="Dim.1", j="Dim.2"){
     # Calculate color palette if needed
   if("quali.sup" %in% names(pca)){
     datacol=form_palette(dataset=dataset,varname=pca$quali.sup.name)
-    plot=plot+ggplot2::scale_color_manual(values=datacol$colors)
+    plot=plot+
+      ggplot2::scale_fill_manual(values=datacol$colors)+
+      ggplot2::scale_color_manual(values=c("FALSE"="light grey","TRUE"="black"))
   }
   ### Type var
   if(type=="var"){
@@ -53,12 +55,13 @@ plot_pca <- function(dataset,pca, type="var", i="Dim.1", j="Dim.2"){
   if(type=="ind"){
     if(!is.null(pca$quali.sup.name)){
         pcadata=pcadata %>% 
-          dplyr::mutate(group=pca$quali.sup.value)
+          dplyr::mutate(group=pca$quali.sup.value,
+                        selectA=as.character(dataset$selectA))
         plot=plot +
           ggplot2::geom_point(data=pcadata,
+                              shape=21,size=4, alpha=0.5,
                               ggplot2::aes(x=.data[[i]],y=.data[[j]],
-                                          col=group,text=name),
-                              alpha=0.5)
+                                          fill=group,text=name, color=selectA))
     }else{
         plot=plot + 
           ggplot2::geom_text(ggplot2::aes(x=.data[[i]], y=.data[[j]],
