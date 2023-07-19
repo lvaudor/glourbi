@@ -253,7 +253,8 @@ global_map <- function(dataset=all_cities,varname="X2018") {
                                  stroke=~selectA,
                                  color="black",
                                  weight=2,
-                                 fillOpacity=1)
+                                 fillOpacity=0.75,
+                                 radius=6)
   return(map)
 }
 ```
