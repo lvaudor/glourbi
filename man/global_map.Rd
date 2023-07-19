@@ -19,4 +19,5 @@ global_map Title
 }
 \examples{
 global_map(all_cities,"X2018")
+global_map(all_cities,"clim")
 }

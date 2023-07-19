@@ -18,6 +18,10 @@
 #' mypca=run_pca(all_cities_clust,quali.sup="cluster")
 #' plot_pca(all_cities_clust,mypca,type="var")
 #' plot_pca(all_cities_clust,mypca,type="ind")
+#'
+#' mypca=run_pca(all_cities_clust,quali.sup="X2018")
+#' plot_pca(all_cities_clust,mypca,type="var")
+#' plot_pca(all_cities_clust,mypca,type="ind")
 plot_pca <- function(dataset,pca, type="var", i="Dim.1", j="Dim.2"){
   # Calculate dataset of coordinates on factorial plan
   pcadata=pca[[type]]$coord %>%

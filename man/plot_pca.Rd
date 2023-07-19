@@ -33,4 +33,8 @@ all_cities_clust=run_hclust(all_cities, nclust=10)
 mypca=run_pca(all_cities_clust,quali.sup="cluster")
 plot_pca(all_cities_clust,mypca,type="var")
 plot_pca(all_cities_clust,mypca,type="ind")
+
+mypca=run_pca(all_cities_clust,quali.sup="X2018")
+plot_pca(all_cities_clust,mypca,type="var")
+plot_pca(all_cities_clust,mypca,type="ind")
 }

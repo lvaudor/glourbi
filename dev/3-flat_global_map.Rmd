@@ -70,7 +70,7 @@ fun_palette <- function(dataset=all_cities,varname){
   if(varname %in% vars$vars_num){
         pal=function(x){
              # get a list of colors according to the total number of factor levels
-             colslist = grDevices::colorRampPalette(RColorBrewer::brewer.pal(8,"PuBuGn"))(10)
+             colslist = grDevices::colorRampPalette(RColorBrewer::brewer.pal(8,"RdYlBu"))(10)
              # assign color to each element of x
              cutx=cut(x,quantile(x,seq(0,1,by=0.1)),include.lowest=TRUE)
              cols=colslist[as.numeric(cutx)]
@@ -244,9 +244,7 @@ global_map <- function(dataset=all_cities,varname="X2018") {
   vars=sep_data(dataset)
   pal=fun_palette(dataset,varname)
   datamap=dataset %>% 
-    dplyr::mutate(colors=pal(dataset[[varname]])) %>% 
-    dplyr::mutate(alpha=dplyr::case_when(selectA~0,
-                                         TRUE~0.5))
+    dplyr::mutate(colors=pal(dataset[[varname]]))
   map= leaflet::leaflet(datamap) %>% 
        leaflet::addTiles() %>% 
        leaflet::addCircleMarkers(fillColor=~colors,
@@ -254,13 +252,15 @@ global_map <- function(dataset=all_cities,varname="X2018") {
                                  layerId=~name,
                                  stroke=~selectA,
                                  color="black",
-                                 weight=2)
+                                 weight=2,
+                                 fillOpacity=1)
   return(map)
 }
 ```
 
 ```{r examples-global_map}
 global_map(all_cities,"X2018")
+global_map(all_cities,"clim")
 ```
 
 ```{r tests-global_map}

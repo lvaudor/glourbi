@@ -9,13 +9,12 @@
 #'
 #' @examples
 #' global_map(all_cities,"X2018")
+#' global_map(all_cities,"clim")
 global_map <- function(dataset=all_cities,varname="X2018") {
   vars=sep_data(dataset)
   pal=fun_palette(dataset,varname)
   datamap=dataset %>% 
-    dplyr::mutate(colors=pal(dataset[[varname]])) %>% 
-    dplyr::mutate(alpha=dplyr::case_when(selectA~0,
-                                         TRUE~0.5))
+    dplyr::mutate(colors=pal(dataset[[varname]]))
   map= leaflet::leaflet(datamap) %>% 
        leaflet::addTiles() %>% 
        leaflet::addCircleMarkers(fillColor=~colors,
@@ -23,6 +22,7 @@ global_map <- function(dataset=all_cities,varname="X2018") {
                                  layerId=~name,
                                  stroke=~selectA,
                                  color="black",
-                                 weight=2)
+                                 weight=2,
+                                 fillOpacity=1)
   return(map)
 }

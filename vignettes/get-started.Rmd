@@ -106,5 +106,6 @@ plot_palette(all_cities,"X2018")
 
 ```{r examples-global_map}
 global_map(all_cities,"X2018")
+global_map(all_cities,"clim")
 ```
 
