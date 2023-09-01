@@ -3,6 +3,7 @@
 export("%>%")
 export(categorize)
 export(describe_city)
+export(describe_clusters)
 export(form_palette)
 export(fun_palette)
 export(get_color)

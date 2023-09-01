@@ -28,7 +28,7 @@ pkgload::load_all(export_all = FALSE)
     
 ```{r function-sep_data}
 #' A function that separates variables in the dataset into 3 groups: identifying (vars_id), descriptive (vars_des), numeric (vars_num)
-#' @param dataset a dataset with varnames comparable to all_cities
+#' @param dataset a glourbi dataset with varnames comparable to all_cities
 #' @return a list with elements vars_id, vars_des, vars_cat, vars_num
 #' 
 #' @export
@@ -63,7 +63,6 @@ test_that("sep_data works", {
   expect_true(is.list(sep_data(all_cities)))
 })
 ```
-
 
 # norm_data: a function to normalize data prior to PCA or Hierarchical clustering calculations
 
@@ -116,6 +115,8 @@ test_that("norm_data works", {
     
 ```{r function-run_pca}
 #' Runs a PCA on dataset
+#' @param dataset a glourbi dataset with varnames comparable to all_cities
+#' @param quali.sup a qualitative variable used for coloring points in factorial maps
 #' @return a PCA object
 #' 
 #' @export
@@ -196,7 +197,7 @@ test_that("rescale works", {
     
 ```{r function-run_hclust}
 #' Runs a hierarchical clustering on dataset
-#' @param dataset dataset name
+#' @param dataset a glourbi dataset with varnames comparable to all_cities
 #' @param nclust number of clusters
 #' 
 #' @return a dataset in which a new variable exists documenting classes (nclust clusters)
@@ -233,6 +234,52 @@ test_that("run_hclust works", {
   
 })
 ```
+  
+
+# describe_clusters: a function to describe all clusters based on all variables, either quantitative through boxplots, or categorical through 
+
+```{r function-describe_clusters}
+#' Title
+#' 
+#' Description
+#' @param a glourbi dataset with varnames comparable to all_cities, with a cluster descriptor
+#' @param display_ranks whether to show raw values of quantitative variables or ranks (as calculated by function norm_data) defaults to FALSE
+#' @return a plot gathering boxplots as facets
+#' 
+#' @export
+describe_clusters <- function(dataset,display_ranks=FALSE){
+    if (display_ranks){
+      dataset_num=norm_data(dataset)
+    }else{
+      vars_num=dataset %>% 
+        sep_data() %>% 
+        .$vars_num
+      dataset_num=dataset[,vars_num]
+    }
+    dataset_boxplots=cbind(cluster=dataset$cluster,dataset_num) %>% 
+      tidyr::pivot_longer(cols=-cluster)
+    datacol=form_palette(dataset,"cluster") 
+    ggplot2::ggplot(dataset_boxplots,
+                    ggplot2::aes(x=cluster,y=value, fill=cluster))+
+      ggplot2::geom_boxplot()+
+      ggplot2::facet_wrap(ggplot2::vars(name), scales="free_y")+
+      ggplot2::scale_fill_manual(values=datacol$colors)
+}
+```
+  
+```{r example-describe_clusters}
+data(all_cities)
+all_cities_clust=run_hclust(all_cities, nclust=2)
+describe_clusters(all_cities_clust,display_ranks=TRUE)
+describe_clusters(all_cities_clust,display_ranks=FALSE)
+```
+  
+```{r tests-describe_clusters}
+test_that("describe_clusters works", {
+  expect_true(inherits(describe_clusters, "function")) 
+})
+```
+
   
 # plot_pca
     
