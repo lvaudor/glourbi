@@ -7,7 +7,7 @@
 sep_data(dataset)
 }
 \arguments{
-\item{dataset}{a dataset with varnames comparable to all_cities}
+\item{dataset}{a glourbi dataset with varnames comparable to all_cities}
 }
 \value{
 a list with elements vars_id, vars_des, vars_cat, vars_num

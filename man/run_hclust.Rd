@@ -7,7 +7,7 @@
 run_hclust(dataset, nclust = 5, namevar = "cluster")
 }
 \arguments{
-\item{dataset}{dataset name}
+\item{dataset}{a glourbi dataset with varnames comparable to all_cities}
 
 \item{nclust}{number of clusters}
 }

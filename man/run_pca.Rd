@@ -6,6 +6,11 @@
 \usage{
 run_pca(dataset, quali.sup = NULL)
 }
+\arguments{
+\item{dataset}{a glourbi dataset with varnames comparable to all_cities}
+
+\item{quali.sup}{a qualitative variable used for coloring points in factorial maps}
+}
 \value{
 a PCA object
 }
