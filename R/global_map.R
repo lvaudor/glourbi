@@ -16,7 +16,7 @@ global_map <- function(dataset=all_cities,varname="X2018") {
   datamap=dataset %>% 
     dplyr::mutate(colors=pal(dataset[[varname]]))
   map= leaflet::leaflet(datamap) %>% 
-       leaflet::addTiles() %>% 
+       leaflet::addProviderTiles("Stamen.TonerLite") %>%  
        leaflet::addCircleMarkers(fillColor=~colors,
                                  popup=~name,
                                  layerId=~name,
