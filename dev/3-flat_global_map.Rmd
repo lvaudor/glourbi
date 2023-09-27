@@ -250,7 +250,7 @@ global_map <- function(dataset=all_cities,varname="X2018") {
        leaflet::addCircleMarkers(fillColor=~colors,
                                  popup=~name,
                                  layerId=~name,
-                                 stroke=~selectA,
+                                 stroke=~selection1,
                                  color="black",
                                  weight=2,
                                  fillOpacity=0.75,
