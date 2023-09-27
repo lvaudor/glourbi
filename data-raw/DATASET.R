@@ -4,7 +4,13 @@ study_areas=sf::st_read("data-raw/study_areas_temp/study_areas_20230713_buffer.s
 
 ## code to prepare `DATASET` dataset goes here
 all_cities=read_csv("data-raw/GHS_all_complete_subset.csv")
+selected_cities=read_csv2("data-raw/GloUrb_study_area_selection_24082023.csv") %>%
+  mutate(select=case_when(select~TRUE,
+                          TRUE~FALSE)) %>%
+  select(ID,selection1=select) %>%
+  unique()
 all_cities=all_cities %>%
+  left_join(selected_cities,by="ID") %>%
   mutate(Continent=case_when(is.na(Continent)~"AN",
                               TRUE~Continent)) %>%
   group_by(Urban.Aggl) %>%
