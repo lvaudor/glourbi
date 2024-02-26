@@ -253,7 +253,7 @@ test_that("run_hclust works", {
 #' 
 #' @export
 describe_clusters <- function(dataset,display_ranks=FALSE){
-    vars=sep_data(dataset)
+    vars=sep_vars(dataset)
     if (display_ranks){
       dataset_num=norm_data(dataset)
     }else{

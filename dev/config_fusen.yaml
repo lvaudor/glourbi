@@ -22,9 +22,9 @@
   - R/rescale.R
   - R/run_hclust.R
   - R/run_pca.R
-  - R/sep_data.R
+  - R/sep_vars.R
   tests:
-  - tests/testthat/test-sep_data.R
+  - tests/testthat/test-sep_vars.R
   - tests/testthat/test-norm_data.R
   - tests/testthat/test-run_pca.R
   - tests/testthat/test-rescale.R
