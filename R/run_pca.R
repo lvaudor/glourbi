@@ -14,16 +14,16 @@
 #' mypca=run_pca(all_cities_clust,quali.sup="X2018")
 run_pca <- function(dataset, quali.sup=NULL){
   datacomp=dataset %>% 
-    sep_data() %>% 
+    sep_vars() %>% 
     .$dataset
   dataset_num = dataset %>%
     glourbi:::norm_data() 
     
   if(!is.null(quali.sup)){
-    if(quali.sup %in% sep_data(dataset)$vars_cat){
+    if(quali.sup %in% sep_vars(dataset)$vars_cat){
         quali.sup.value=datacomp[[quali.sup]]
     }
-    if(quali.sup %in% sep_data(dataset)$vars_num){
+    if(quali.sup %in% sep_vars(dataset)$vars_num){
         quali.sup.value=categorize(dataset,quali.sup)
     }
     dataset_num=dataset_num %>% 

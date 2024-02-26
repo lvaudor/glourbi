@@ -9,7 +9,7 @@
 #' @examples
 #' categorize(all_cities,"X2018")
 categorize <- function(dataset=all_cities, varname){
-  if(varname %in% sep_data(dataset)$vars_num){
+  if(varname %in% sep_vars(dataset)$vars_num){
     x=dataset[[varname]]
     result=cut(x, quantile(x,seq(0,1,by=0.1)),include.lowest=TRUE)
   return(result)

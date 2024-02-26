@@ -11,10 +11,10 @@
 norm_data <- function(dataset, label="name", type="rank"){
   # Keep only complete rows
   datacomp=dataset %>% 
-    sep_data() %>% 
+    sep_vars() %>% 
     .$dataset
   vars_num=dataset %>% 
-    sep_data() %>% 
+    sep_vars() %>% 
     .$vars_num
   
   dataset_norm=datacomp[,vars_num] %>% 

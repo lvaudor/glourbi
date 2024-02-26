@@ -25,8 +25,7 @@ describe_city <- function(dataset=all_cities,city){
                     color="#e9e9e9") %>% 
       dplyr::mutate(x1=0,x2=1,y1=index-0.5,y2=index+1) %>% 
       dplyr::select(type,index,name,varname,value,x1,x2,y1,y2,color,text)
-    sepdata=sep_data(dataset)
-    dataset_cat=dataset[,c("name",sepdata$vars_cat)]  %>% 
+    dataset_cat=dataset[,c("name",sep_vars(dataset)$vars_cat)]  %>% 
       dplyr::filter(name==city) %>% 
       tidyr::pivot_longer(cols=-name, names_to="varname") %>% 
       dplyr::mutate(color=purrr::map2_chr(varname,value,glourbi:::get_color, dataset=dataset))

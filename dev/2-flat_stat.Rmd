@@ -24,15 +24,15 @@ pkgload::load_all(export_all = FALSE)
 ```
 
 
-# sep_data
+# sep_vars
     
-```{r function-sep_data}
+```{r function-sep_varsa}
 #' A function that separates variables in the dataset into 3 groups: identifying (vars_id), descriptive (vars_des), numeric (vars_num)
 #' @param dataset a glourbi dataset with varnames comparable to all_cities
 #' @return a list with elements vars_id, vars_des, vars_cat, vars_num
 #' 
 #' @export
-sep_data <- function(dataset){
+sep_vars <- function(dataset){
   dataset =dataset %>% 
     na.omit()
   # Keep only variables used for calculations of PCA
@@ -52,15 +52,15 @@ sep_data <- function(dataset){
 }
 ```
   
-```{r example-sep_data}
-sep_data(all_cities)
+```{r example-sep_vars}
+sep_vars(all_cities)
 ```
   
-```{r tests-sep_data}
+```{r tests-sep_vars}
 data(all_cities)
-test_that("sep_data works", {
-  expect_true(inherits(sep_data, "function")) 
-  expect_true(is.list(sep_data(all_cities)))
+test_that("sep_vars works", {
+  expect_true(inherits(sep_vars, "function")) 
+  expect_true(is.list(sep_vars(all_cities)))
 })
 ```
 
@@ -76,10 +76,10 @@ test_that("sep_data works", {
 norm_data <- function(dataset, label="name", type="rank"){
   # Keep only complete rows
   datacomp=dataset %>% 
-    sep_data() %>% 
+    sep_vars() %>% 
     .$dataset
   vars_num=dataset %>% 
-    sep_data() %>% 
+    sep_vars() %>% 
     .$vars_num
   
   dataset_norm=datacomp[,vars_num] %>% 
@@ -122,16 +122,16 @@ test_that("norm_data works", {
 #' @export
 run_pca <- function(dataset, quali.sup=NULL){
   datacomp=dataset %>% 
-    sep_data() %>% 
+    sep_vars() %>% 
     .$dataset
   dataset_num = dataset %>%
     glourbi:::norm_data() 
     
   if(!is.null(quali.sup)){
-    if(quali.sup %in% sep_data(dataset)$vars_cat){
+    if(quali.sup %in% sep_vars(dataset)$vars_cat){
         quali.sup.value=datacomp[[quali.sup]]
     }
-    if(quali.sup %in% sep_data(dataset)$vars_num){
+    if(quali.sup %in% sep_vars(dataset)$vars_num){
         quali.sup.value=categorize(dataset,quali.sup)
     }
     dataset_num=dataset_num %>% 
@@ -209,7 +209,7 @@ run_hclust <- function(dataset, nclust=5,namevar="cluster"){
     # normalize numerical data
     # datan=glourbi:::norm_data(dataset)
     # distobj=dist(datan)
-    vars=sep_data(dataset)
+    vars=sep_vars(dataset)
     dataclust=dataset %>% 
       dplyr::select(vars$vars_cat,vars$vars_num)
     distobj=cluster::daisy(dataclust)
@@ -257,7 +257,7 @@ describe_clusters <- function(dataset,display_ranks=FALSE){
       dataset_num=norm_data(dataset)
     }else{
       vars_num=dataset %>% 
-        sep_data() %>% 
+        sep_vars() %>% 
         .$vars_num
       dataset_num=dataset[,vars_num]
     }

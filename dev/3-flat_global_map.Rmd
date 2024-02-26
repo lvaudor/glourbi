@@ -24,7 +24,7 @@ pkgload::load_all(export_all = FALSE)
 #' 
 #' @export
 categorize <- function(dataset=all_cities, varname){
-  if(varname %in% sep_data(dataset)$vars_num){
+  if(varname %in% sep_vars(dataset)$vars_num){
     x=dataset[[varname]]
     result=cut(x, quantile(x,seq(0,1,by=0.1)),include.lowest=TRUE)
   return(result)
@@ -53,7 +53,7 @@ test_that("categorize works", {
 #' 
 #' @export
 fun_palette <- function(dataset=all_cities,varname){
-  vars=sep_data(dataset)
+  vars=sep_vars(dataset)
   x=dataset[[varname]]
   # For categorical variables
   if(varname %in% vars$vars_cat){
@@ -107,7 +107,7 @@ test_that("fun_palette works", {
 #' @export
 #' @noRd
 form_palette=function(dataset=all_cities,varname){
-  vars=sep_data(dataset)
+  vars=sep_vars(dataset)
   x=dataset[[varname]]
   
   pal=fun_palette(dataset,varname)
@@ -241,7 +241,7 @@ test_that("plot_palette works", {
 #'
 #' @examples
 global_map <- function(dataset=all_cities,varname="X2018") {
-  vars=sep_data(dataset)
+  vars=sep_vars(dataset)
   pal=fun_palette(dataset,varname)
   datamap=dataset %>% 
     dplyr::mutate(colors=pal(dataset[[varname]]))

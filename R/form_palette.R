@@ -13,7 +13,7 @@
 #' datacol=form_palette(all_cities,"clim")
 #' datacol
 form_palette=function(dataset=all_cities,varname){
-  vars=sep_data(dataset)
+  vars=sep_vars(dataset)
   x=dataset[[varname]]
   
   pal=fun_palette(dataset,varname)

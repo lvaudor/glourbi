@@ -31,14 +31,14 @@ If it is the first time you use {fusen}, after 'description', you can directly r
 --> 
 
 
-# sep_data
+# sep_vars
 
     
 
   
 
-```{r example-sep_data}
-sep_data(all_cities)
+```{r example-sep_vars}
+sep_vars(all_cities)
 ```
 
   

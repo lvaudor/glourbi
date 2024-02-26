@@ -14,7 +14,7 @@
 #' plot_distrib(all_cities_clust,"X2018")
 #' plot_distrib(all_cities_clust,"X2018",byclass=TRUE)
 plot_distrib <- function(dataset=all_cities,varname, byclass=FALSE){
- vars=sep_data(dataset)
+ vars=sep_vars(dataset)
  dataset=dataset %>% 
    dplyr::mutate(xdistrib=.[[varname]])
  datacol=form_palette(dataset,varname)
@@ -26,7 +26,7 @@ plot_distrib <- function(dataset=all_cities,varname, byclass=FALSE){
    plot=plot +
     ggplot2::facet_grid(rows=ggplot2::vars(cluster))
  } 
- if(varname %in% sep_data(dataset)$vars_num){
+ if(varname %in% sep_vars(dataset)$vars_num){
    plot=plot +
     ggplot2::geom_density(lwd=1)+
     ggplot2::geom_rect(data=datacol,
@@ -39,7 +39,7 @@ plot_distrib <- function(dataset=all_cities,varname, byclass=FALSE){
     ggplot2::theme(legend.position="none")+
     ggplot2::scale_x_log10()
  }
- if(varname %in% sep_data(dataset)$vars_cat){
+ if(varname %in% sep_vars(dataset)$vars_cat){
    plot=plot+
     ggplot2::geom_bar(stat="count", ggplot2::aes(fill=xdistrib))+
     ggplot2::scale_fill_manual(values=datacol$colors)

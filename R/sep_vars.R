@@ -3,12 +3,12 @@
 #' A function that separates variables in the dataset into 3 groups: identifying (vars_id), descriptive (vars_des), numeric (vars_num)
 #' @param dataset a glourbi dataset with varnames comparable to all_cities
 #' @return a list with elements vars_id, vars_des, vars_cat, vars_num
-#'
+#' 
 #' @export
 #' @examples
 #' sep_vars(all_cities)
 sep_vars <- function(dataset){
-  dataset =dataset %>%
+  dataset =dataset %>% 
     na.omit()
   # Keep only variables used for calculations of PCA
   vars_id="name"
