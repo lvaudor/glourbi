@@ -207,8 +207,13 @@ run_hclust <- function(dataset, nclust=5,namevar="cluster"){
     # add leading zeros to cluster number to keep order
     ndigits=ceiling(nclust/10)
     # normalize numerical data
-    datan=glourbi:::norm_data(dataset)
-    distobj=dist(datan)
+    # datan=glourbi:::norm_data(dataset)
+    # distobj=dist(datan)
+    vars=sep_data(dataset)
+    dataclust=dataset %>% 
+      dplyr::select(vars$vars_cat,vars$vars_num)
+    distobj=cluster::daisy(dataclust)
+    
     tree=hclust(distobj)
     datan=dataset %>% 
       dplyr::mutate(cluster=cutree(tree,k=nclust)) %>% 
