@@ -14,20 +14,28 @@
 #' describe_clusters(all_cities_clust,display_ranks=TRUE)
 #' describe_clusters(all_cities_clust,display_ranks=FALSE)
 describe_clusters <- function(dataset,display_ranks=FALSE){
+    vars=sep_data(dataset)
     if (display_ranks){
       dataset_num=norm_data(dataset)
     }else{
-      vars_num=dataset %>% 
-        sep_vars() %>% 
-        .$vars_num
-      dataset_num=dataset[,vars_num]
+      dataset_num=dataset[,vars$vars_num]
     }
-    dataset_boxplots=cbind(cluster=dataset$cluster,dataset_num) %>% 
+    dataset_cat=dataset[,vars$vars_cat]
+    dataset_num=cbind(cluster=dataset$cluster,dataset_num) %>%
       tidyr::pivot_longer(cols=-cluster)
-    datacol=form_palette(dataset,"cluster") 
-    ggplot2::ggplot(dataset_boxplots,
+    dataset_cat=cbind(cluster=dataset$cluster,dataset_cat) %>%
+      tidyr::pivot_longer(cols=-cluster)
+    datacol=form_palette(dataset,"cluster")
+    pnum=ggplot2::ggplot(dataset_num,
                     ggplot2::aes(x=cluster,y=value, fill=cluster))+
       ggplot2::geom_boxplot()+
       ggplot2::facet_wrap(ggplot2::vars(name), scales="free_y")+
       ggplot2::scale_fill_manual(values=datacol$colors)
+    pcat=ggplot2::ggplot(dataset_cat,
+                         ggplot2::aes(x=value,fill=cluster))+
+      ggplot2::geom_bar()+
+      ggplot2::coord_flip()+
+      ggplot2::facet_wrap(ggplot2::vars(name),scales="free_y")+
+      ggplot2::scale_fill_manual(values=datacol$colors)
+    cowplot::plot_grid(pnum,pcat)
 }

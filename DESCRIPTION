@@ -10,6 +10,7 @@ Depends:
     R (>= 2.10)
 Imports: 
     cluster,
+    cowplot,
     dplyr,
     FactoMineR,
     ggplot2,
