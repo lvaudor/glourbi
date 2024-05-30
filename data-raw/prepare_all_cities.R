@@ -29,7 +29,6 @@ selection2_cities=tib %>%
   tidyr::unnest(cols="pol") %>%
   unique()
 
-usethis::use_data(selection2_cities,overwrite=TRUE)
 
 
 
@@ -69,7 +68,7 @@ all_cities=all_cities %>%
   na.omit() %>%
 
   mutate(selectA=case_when(City.Code %in% study_areas$City.Code~ TRUE,
-                           TRUE~ FALSE))
+                           TRUE~ FALSE)) %>%
 
   mutate(selection2=case_when(City.Code %in% selection2_cities$CityCode~ TRUE,
                            TRUE~ FALSE))
