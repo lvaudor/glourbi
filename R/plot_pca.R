@@ -60,7 +60,7 @@ plot_pca <- function(dataset,pca, type="var", i="Dim.1", j="Dim.2"){
     if(!is.null(pca$quali.sup.name)){
         pcadata=pcadata %>%
           dplyr::mutate(group=pca$quali.sup.value,
-                        selectA=as.character(dataset$selection1))
+                        selection1=as.character(dataset$selection1))
         plot=plot +
           ggplot2::geom_point(data=pcadata,
                               shape=21,size=4, alpha=0.5,
