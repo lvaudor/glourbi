@@ -57,10 +57,6 @@ all_cities=all_cities %>%
          clim=as.factor(clim)
          ) %>%
   na.omit() %>%
-
-  mutate(selectA=case_when(City.Code %in% study_areas$City.Code~ TRUE,
-                           TRUE~ FALSE)) %>%
-
   mutate(selection1=case_when(ID %in% selection1_cities$CityCode~ TRUE,
                            TRUE~ FALSE))
 
