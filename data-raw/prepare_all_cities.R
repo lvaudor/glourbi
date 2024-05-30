@@ -29,10 +29,6 @@ selection1_cities=tib %>%
   tidyr::unnest(cols="pol") %>%
   unique()
 
-# study_areas is used for OSM exploration.
-#For now it corresponds to 16 cities.
-#It will be updated to correspond to all cities of selection2
-study_areas=sf::st_read("data-raw/data-gitignored/study_areas_temp/study_areas_20230713_buffer.shp")
 
 
 ## code to prepare `DATASET` dataset goes here
