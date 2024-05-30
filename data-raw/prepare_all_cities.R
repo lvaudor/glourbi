@@ -21,7 +21,7 @@ dir.create("inst/per_city")
 purrr::map(tib$pol,splash_pol)
 
 #' Get list of cities (identifiers CityCode and name UrbanAggl)
-selection2_cities=tib %>%
+selection1_cities=tib %>%
   select(pol) %>%
   mutate(pol=purrr::map(pol,sf::st_drop_geometry)) %>%
   mutate(pol=purrr::map(pol,~select(.x,CityCode,UrbanAggl=starts_with("Urban")))) %>%
@@ -37,13 +37,8 @@ study_areas=sf::st_read("data-raw/data-gitignored/study_areas_temp/study_areas_2
 
 ## code to prepare `DATASET` dataset goes here
 all_cities=read_csv("data-raw/data-gitignored/GHS_all_complete_subset.csv")
-selected_cities=read_csv2("data-raw/data-gitignored/GloUrb_study_area_selection_24082023.csv") %>%
-  mutate(select=case_when(select~TRUE,
-                          TRUE~FALSE)) %>%
-  select(ID,selection1=select) %>%
-  unique()
+
 all_cities=all_cities %>%
-  left_join(selected_cities,by="ID") %>%
   mutate(Continent=case_when(is.na(Continent)~"AN",
                               TRUE~Continent)) %>%
   group_by(Urban.Aggl) %>%
@@ -66,7 +61,7 @@ all_cities=all_cities %>%
   mutate(selectA=case_when(City.Code %in% study_areas$City.Code~ TRUE,
                            TRUE~ FALSE)) %>%
 
-  mutate(selection2=case_when(ID %in% selection2_cities$CityCode~ TRUE,
+  mutate(selection2=case_when(ID %in% selection1_cities$CityCode~ TRUE,
                            TRUE~ FALSE))
 
 usethis::use_data(all_cities, overwrite = TRUE)
