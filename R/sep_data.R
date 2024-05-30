@@ -13,7 +13,7 @@ sep_vars <- function(dataset){
   # Keep only variables used for calculations of PCA
   vars_id="name"
   vars_des=c("Urban.Aggl","ID","Latitude","Longitude",
-             "Continent","Country.Co","City.Code","selectA"
+             "Continent","Country.Co","City.Code","selection1"
              )
   vars_cat=c("clco","biom","clim")
   if("cluster" %in% colnames(dataset)){vars_cat=c(vars_cat,"cluster")}

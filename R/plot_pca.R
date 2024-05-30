@@ -25,9 +25,9 @@
 plot_pca <- function(dataset,pca, type="var", i="Dim.1", j="Dim.2"){
   # Calculate dataset of coordinates on factorial plan
   pcadata=pca[[type]]$coord %>%
-    as.data.frame() %>% 
-    tibble::rownames_to_column("name")%>% 
-    tibble::as_tibble() 
+    as.data.frame() %>%
+    tibble::rownames_to_column("name")%>%
+    tibble::as_tibble()
   pcadata[[i]]=rescale(pcadata[[i]],1)
   pcadata[[j]]=rescale(pcadata[[j]],1)
 
@@ -58,16 +58,16 @@ plot_pca <- function(dataset,pca, type="var", i="Dim.1", j="Dim.2"){
   # Type ind
   if(type=="ind"){
     if(!is.null(pca$quali.sup.name)){
-        pcadata=pcadata %>% 
+        pcadata=pcadata %>%
           dplyr::mutate(group=pca$quali.sup.value,
-                        selectA=as.character(dataset$selectA))
+                        selectA=as.character(dataset$selection1))
         plot=plot +
           ggplot2::geom_point(data=pcadata,
                               shape=21,size=4, alpha=0.5,
                               ggplot2::aes(x=.data[[i]],y=.data[[j]],
-                                          fill=group,text=name, color=selectA))
+                                          fill=group,text=name, color=selection1))
     }else{
-        plot=plot + 
+        plot=plot +
           ggplot2::geom_text(ggplot2::aes(x=.data[[i]], y=.data[[j]],
                                           text=name))
     }
