@@ -29,10 +29,6 @@ selection2_cities=tib %>%
   tidyr::unnest(cols="pol") %>%
   unique()
 
-
-
-
-
 # study_areas is used for OSM exploration.
 #For now it corresponds to 16 cities.
 #It will be updated to correspond to all cities of selection2
@@ -70,7 +66,7 @@ all_cities=all_cities %>%
   mutate(selectA=case_when(City.Code %in% study_areas$City.Code~ TRUE,
                            TRUE~ FALSE)) %>%
 
-  mutate(selection2=case_when(City.Code %in% selection2_cities$CityCode~ TRUE,
+  mutate(selection2=case_when(ID %in% selection2_cities$CityCode~ TRUE,
                            TRUE~ FALSE))
 
 usethis::use_data(all_cities, overwrite = TRUE)
