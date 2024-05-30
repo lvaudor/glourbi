@@ -17,7 +17,7 @@ splash_pol=function(pol){
 }
 
 #' Create target directory and run splash_pol to get individual shapefiles for each city
-dir.create("inst/per-city")
+dir.create("inst/per_city")
 purrr::map(tib$pol,splash_pol)
 
 #' Get list of cities (identifiers CityCode and name UrbanAggl)
