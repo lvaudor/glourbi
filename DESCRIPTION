@@ -21,6 +21,7 @@ Imports:
     plotly,
     purrr,
     RColorBrewer,
+    sf,
     tibble,
     tidyr
 Suggests: 
