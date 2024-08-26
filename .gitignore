@@ -6,5 +6,4 @@
 .Rdata
 .quarto
 inst/doc
-inst/per_city
 data-raw/data-gitignored
