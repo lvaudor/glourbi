@@ -1,33 +1,24 @@
 library(tidyverse)
+tibpol= sf::st_read(dsn="data-raw/data-gitignored/",
+                    layer="StudyArea_reach_zone")
 
-#' prepare a tibble with the path to the shapefiles,
-#' and the sf objects themselves (pol for polygons)
-tib=tibble::tibble(dir=list.files("data-raw/data-gitignored/per_city_raw") %>%
-                     stringr::str_subset("study_area_"),
-                   file=paste0("data-raw/data-gitignored/per_city_raw/",dir,"/",dir,".shp")) %>%
-  mutate(pol=purrr::map(file,sf::st_read))
-
-#' The splash_pol function writes the sf objects (pol) to shapefiles in directory "inst/per_city"
-splash_pol=function(pol){
-  pol %>%
-    mutate(filename=paste0("inst/per_city/",CityCode,".shp")) %>%
+#' The splash_pol function writes the sf objects (tibpol) to shapefiles in directory "inst/{dir}"
+splash_pol=function(tibpol,dir){
+  tibpol=tibpol %>%
+    mutate(filename=paste0("inst/",dir,"/",CityCode,".shp")) %>%
+    select(-ID) %>%
     group_by(CityCode,filename) %>%
     tidyr::nest() %>%
     mutate(do=purrr::walk2(.x=data,.y=filename,~sf::st_write(.x,dsn=.y,overwrite=TRUE)))
+  return(tibpol)
 }
 
 #' Create target directory and run splash_pol to get individual shapefiles for each city
 dir.create("inst/per_city")
-purrr::map(tib$pol,splash_pol)
+splash_pol(tibpol,dir="per_city")
 
 #' Get list of cities (identifiers CityCode and name UrbanAggl)
-selection1_cities=tib %>%
-  select(pol) %>%
-  mutate(pol=purrr::map(pol,sf::st_drop_geometry)) %>%
-  mutate(pol=purrr::map(pol,~select(.x,CityCode,UrbanAggl=starts_with("Urban")))) %>%
-  # in some shapefiles name is "Urban.Aggl" instead of "UrbanAggl"
-  tidyr::unnest(cols="pol") %>%
-  unique()
+selection1_cities=tibpol
 
 
 
