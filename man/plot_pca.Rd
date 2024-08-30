@@ -4,7 +4,14 @@
 \alias{plot_pca}
 \title{Plot the variables on factorial plan (i,j)}
 \usage{
-plot_pca(dataset, pca, type = "var", i = "Dim.1", j = "Dim.2")
+plot_pca(
+  dataset,
+  pca,
+  type = "var",
+  i = "Dim.1",
+  j = "Dim.2",
+  highlight_subset = NULL
+)
 }
 \arguments{
 \item{dataset}{a dataset on which PCA has been run}
@@ -16,6 +23,8 @@ plot_pca(dataset, pca, type = "var", i = "Dim.1", j = "Dim.2")
 \item{i}{factorial axis represented as x (defaults to "Dim.1")}
 
 \item{j}{factorial axis represented as y (defaults to "Dim.2")}
+
+\item{highlight_subset}{a subset of dataset which should be highlighted in the plot of individuals}
 }
 \value{
 a PCA plot of individuals or variables
@@ -37,4 +46,5 @@ plot_pca(all_cities_clust,mypca,type="ind")
 mypca=run_pca(all_cities_clust,quali.sup="X2018")
 plot_pca(all_cities_clust,mypca,type="var")
 plot_pca(all_cities_clust,mypca,type="ind")
+plot_pca(all_cities_clust,mypca,type="ind",highlight_subset=dataset \%>\% dplyr::filter(Urban.Aggl=="Lyon"))
 }

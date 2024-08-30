@@ -6,6 +6,7 @@
 #' @param type which type of element you wish to plot ("var" or "ind")
 #' @param i factorial axis represented as x (defaults to "Dim.1")
 #' @param j factorial axis represented as y (defaults to "Dim.2")
+#' @param highlight_subset a subset of dataset which should be highlighted in the plot of individuals
 #' @return a PCA plot of individuals or variables
 #' @export
 #' @examples
@@ -22,7 +23,8 @@
 #' mypca=run_pca(all_cities_clust,quali.sup="X2018")
 #' plot_pca(all_cities_clust,mypca,type="var")
 #' plot_pca(all_cities_clust,mypca,type="ind")
-plot_pca <- function(dataset,pca, type="var", i="Dim.1", j="Dim.2"){
+#' plot_pca(all_cities_clust,mypca,type="ind",highlight_subset=dataset %>% dplyr::filter(Urban.Aggl=="Lyon"))
+plot_pca <- function(dataset,pca, type="var", i="Dim.1", j="Dim.2",highlight_subset=NULL){
   # Calculate dataset of coordinates on factorial plan
   pcadata=pca[[type]]$coord %>%
     as.data.frame() %>%
@@ -70,6 +72,15 @@ plot_pca <- function(dataset,pca, type="var", i="Dim.1", j="Dim.2"){
         plot=plot +
           ggplot2::geom_text(ggplot2::aes(x=.data[[i]], y=.data[[j]],
                                           text=name))
+    }
+    if(!is.null(highlight_subset)){
+      highlight_pcadata=pcadata %>%
+        dplyr::filter(name %in% highlight_subset$name)
+      plot=plot+
+        ggplot2::geom_point(data=highlight_pcadata,
+                            shape=21,size=6,alpha=1,
+                            ggplot2::aes(x=.data[[i]],y=.data[[j]],
+                                         fill=group,text=name, color=selection1))
     }
   } # end type ind
   plotly=plotly::ggplotly(plot, tooltip="text")
