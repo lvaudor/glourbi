@@ -25,6 +25,7 @@ selection1_cities=tibpol
 ## code to prepare `DATASET` dataset goes here
 all_cities=read_csv("data-raw/data-gitignored/GHS_all_complete_subset.csv")
 
+
 all_cities=all_cities %>%
   mutate(Continent=case_when(is.na(Continent)~"AN",
                               TRUE~Continent)) %>%
@@ -48,7 +49,6 @@ all_cities=all_cities %>%
                            TRUE~ FALSE))
 
 usethis::use_data(all_cities, overwrite = TRUE)
-
 
 ##
 meta_all_cities=readr::read_delim("data-raw/data-gitignored/GHS_all_complete_subset_README.txt",
