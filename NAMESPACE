@@ -2,6 +2,7 @@
 
 export("%>%")
 export(categorize)
+export(connect_to_glourb)
 export(connect_to_sandbox)
 export(describe_city)
 export(describe_clusters)
