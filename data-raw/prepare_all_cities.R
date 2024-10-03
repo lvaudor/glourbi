@@ -1,7 +1,6 @@
 library(tidyverse)
 tibpol= sf::st_read(dsn="data-raw/data-gitignored/",
                     layer="StudyArea_reach_zone")
-
 #' The splash_pol function writes the sf objects (tibpol) to shapefiles in directory "inst/{dir}"
 splash_pol=function(tibpol,dir){
   tibpol=tibpol %>%
@@ -23,7 +22,7 @@ selection1_cities=tibpol
 
 
 ## code to prepare `DATASET` dataset goes here
-all_cities=read_csv("data-raw/data-gitignored/GHS_all_complete_subset.csv")
+all_cities=readr::read_csv("data-raw/data-gitignored/GHS_all_complete_subset.csv")
 
 
 all_cities=all_cities %>%
