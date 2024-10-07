@@ -7,9 +7,9 @@
 get_city_sf=function(name, thisCityCode, conn){
   conn=glourbi::connect_to_glourb()
   sql <- "SELECT * FROM ?name WHERE citycode LIKE ?thisCityCode"
-  query <- sqlInterpolate(conn, sql,
-                          thisCityCode = thisCityCode,
-                          name=name)
+  query <- DBI::sqlInterpolate(conn, sql,
+                               thisCityCode = thisCityCode,
+                               name=name)
   result <- sf::st_read(dsn = conn, query = query)
   return(result)
 }
@@ -23,7 +23,7 @@ get_city_sf=function(name, thisCityCode, conn){
 get_city_tib=function(name, thisCityCode, conn){
   conn=glourbi::connect_to_glourb()
   sql <- "SELECT * FROM ?name WHERE citycode LIKE ?thisCityCode"
-  query <- sqlInterpolate(conn, sql,
+  query <- DBI::sqlInterpolate(conn, sql,
                           thisCityCode = thisCityCode,
                           name=name)
   result <- DBI::dbGetQuery(conn=conn, statement = query)
