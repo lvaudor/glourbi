@@ -23,8 +23,7 @@ get_city_tib=function(name, thisCityCode, conn){
   conn=glourbi::connect_to_glourb()
   sql <- glue::glue("SELECT * FROM {name} WHERE citycode LIKE ?thisCityCode")
   query <- DBI::sqlInterpolate(conn, sql,
-                          thisCityCode = thisCityCode,
-                          name=name)
+                          thisCityCode = thisCityCode)
   result <- DBI::dbGetQuery(conn=conn, statement = query)
   return(result)
 }
