@@ -27,7 +27,6 @@ get_txt_page=function(thisCityCode,
 get_txt_segment=function(thisCityCode,
                          thisRiver,
                          conn){
-
   tib_segment=glourbi::get_city_tib(name="txt_segment",
                                     thisCityCode=thisCityCode,
                                     conn=conn)
@@ -36,5 +35,4 @@ get_txt_segment=function(thisCityCode,
         dplyr::filter(river_en==thisRiver)
   }else{result=tib_segment}
   return(result)
-
 }
