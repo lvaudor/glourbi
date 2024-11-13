@@ -16,9 +16,13 @@ splash_pol=function(tibpol,dir){
 dir.create("inst/per_city")
 splash_pol(tibpol,dir="per_city")
 
-#' Get list of cities (identifiers CityCode and name UrbanAggl)
-selection1_cities=tibpol
+#' Get list of cities (identifiers CityCode and name UrbanAggl) in selection 1 for GSW analyses
+selection1_GSW=tibpol
 
+#' Get list of cities (identifiers CityCode and name UrbanAggl) in selection 1 for Discourses analyses
+conn=glourbi::connect_to_glourb()
+txt_city_rivers=DBI::dbReadTable(conn,"txt_city_rivers")
+selection1_Discourses=txt_city_rivers$citycode %>% unique()
 
 
 ## code to prepare `DATASET` dataset goes here
@@ -44,8 +48,12 @@ all_cities=all_cities %>%
          clim=as.factor(clim)
          ) %>%
   na.omit() %>%
-  mutate(selection1=case_when(ID %in% selection1_cities$CityCode~ TRUE,
-                           TRUE~ FALSE))
+  mutate(selection1_GSW=case_when(ID %in% selection1_GSW$CityCode~ TRUE,
+                           TRUE~ FALSE),
+         selection1_Discourses=case_when(ID %in% txt_city_rivers$citycode~TRUE,
+                                         TRUE~FALSE))
+
+
 
 usethis::use_data(all_cities, overwrite = TRUE)
 
