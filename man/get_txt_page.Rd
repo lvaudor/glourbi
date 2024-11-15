@@ -13,6 +13,9 @@ get_txt_page(thisCityCode, thisRiver, conn)
 
 \item{conn}{the connection to glourb database}
 }
+\value{
+a table
+}
 \description{
 Returns txt_page data for given citycode and river
 }

@@ -2,7 +2,7 @@
 #' @param thisCityCode the citycode
 #' @param thisRiver the river
 #' @param conn the connection to glourb database
-#' @return
+#' @return a table
 #' @export
 get_txt_page=function(thisCityCode,
                       thisRiver,
@@ -22,7 +22,7 @@ get_txt_page=function(thisCityCode,
 #' @param thisCityCode the citycode
 #' @param thisRiver the river
 #' @param conn the connection to glourb database
-#' @return
+#' @return a table
 #' @export
 get_txt_segment=function(thisCityCode,
                          thisRiver,

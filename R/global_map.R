@@ -4,19 +4,21 @@
 
 #' @param dataset a dataset, defaults to all_cities
 #' @param varname a string corresponding to one of the variables in all_cities. Defaults to X2018
+#' @param selection1 which selection1 to consider. Can be either selection1_GSW or selection1_Discourses. Defaults to selection1_GSW.
 #' @return a leaflet map
 #' @export
 #'
 #' @examples
 #' global_map(all_cities,"X2018")
 #' global_map(all_cities,"clim")
-global_map <- function(dataset=all_cities,varname="X2018") {
+global_map <- function(dataset=all_cities,varname="X2018", selection1="selection1_GSW") {
   vars=sep_vars(dataset)
   pal=fun_palette(dataset,varname)
-  datamap=dataset %>% 
-    dplyr::mutate(colors=pal(dataset[[varname]]))
-  map= leaflet::leaflet(datamap) %>% 
-       leaflet::addProviderTiles("OpenStreetMap.Mapnik") %>%  
+  datamap=dataset %>%
+    dplyr::mutate(colors=pal(dataset[[varname]])) %>%
+    dplyr::rename(selection1=!!selection1)
+  map= leaflet::leaflet(datamap) %>%
+       leaflet::addProviderTiles("OpenStreetMap.Mapnik") %>%
        leaflet::addCircleMarkers(fillColor=~colors,
                                  popup=~name,
                                  layerId=~name,
