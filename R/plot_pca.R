@@ -62,7 +62,7 @@ plot_pca <- function(dataset,pca, type="var", i="Dim.1", j="Dim.2",highlight_sub
     if(!is.null(pca$quali.sup.name)){
         pcadata=pcadata %>%
           dplyr::mutate(group=pca$quali.sup.value,
-                        selection1=as.character(dataset$selection1))
+                        selection1=as.character(dataset$selection1_GSW))
         plot=plot +
           ggplot2::geom_point(data=pcadata,
                               shape=21,size=4, alpha=0.5,
@@ -80,7 +80,7 @@ plot_pca <- function(dataset,pca, type="var", i="Dim.1", j="Dim.2",highlight_sub
         ggplot2::geom_point(data=highlight_pcadata,
                             shape=21,size=6,alpha=1,
                             ggplot2::aes(x=.data[[i]],y=.data[[j]],
-                                         fill=group,text=name, color=selection1))
+                                         fill=group,text=name, color=selection1_GSW))
     }
   } # end type ind
   plotly=plotly::ggplotly(plot, tooltip="text")
