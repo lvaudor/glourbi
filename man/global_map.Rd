@@ -4,18 +4,12 @@
 \alias{global_map}
 \title{global_map Title}
 \usage{
-global_map(
-  dataset = all_cities,
-  varname = "X2018",
-  selection1 = "selection1_GSW"
-)
+global_map(dataset = all_cities, varname = "X2018")
 }
 \arguments{
 \item{dataset}{a dataset, defaults to all_cities}
 
 \item{varname}{a string corresponding to one of the variables in all_cities. Defaults to X2018}
-
-\item{selection1}{which selection1 to consider. Can be either selection1_GSW or selection1_Discourses. Defaults to selection1_GSW.}
 }
 \value{
 a leaflet map
